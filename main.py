@@ -1,6 +1,7 @@
-import pygame
+import pygame, sys
 from settings import *
 from player import *
+from rooms import *
 pygame.init()
 
 #create game window
@@ -15,13 +16,23 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    button_pressed = pygame.key.get_pressed()
-    button_action(button_pressed)
-    print(player_position)
-    pygame.draw.circle(screen, (255, 255, 255), (player_position[0], player_position[1]), 30)
-    pygame.display.flip()
+    screen.fill((0, 0, 0)) #resets the screen to black every frame
+
+    button_pressed = pygame.key.get_pressed() #sets button_pressed to all keys that are pressed
+    player_action(button_pressed) #determines the players action based on the buttons pressed
+    #print(player_position) debugging line to print the players position to the console
+
+
+    pygame.draw.circle(screen, (255, 255, 255), (player_position[0], player_position[1]), 30) #placeholder for the player, draws a white circle at the players position
+    
+    
+
+
+    pygame.display.update()
     clock.tick(FPS)
-    screen.fill((0, 0, 0))
+    
+
+
 
 
 pygame.quit()

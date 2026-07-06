@@ -8,7 +8,7 @@ player_speed = 10
 def show(text): #used as a debug function to print text to the console
     print(text)
 
-def button_action(buttons):
+def player_action(buttons):
     if buttons[pygame.K_w]:
         move("up")
     if buttons[pygame.K_s]:
