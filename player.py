@@ -37,12 +37,16 @@ animation_timer = 0
 def show(text): #used as a debug function to print text to the console
     print(text)
 
+<<<<<<< HEAD
+def player_action(buttons):
+=======
 def button_action(buttons):
     global player_moving
     global player_direction
 
     player_moving = False
 
+>>>>>>> 18ac6ef0572c0686cbc94729af41101726dd867f
     if buttons[pygame.K_w]:
         move("up")
     if buttons[pygame.K_s]:
