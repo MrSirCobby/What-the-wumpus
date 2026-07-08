@@ -8,7 +8,7 @@ animation_timer = 0
 PLAYER_SPRITE_FS = [32, 32] #width and height of each sprite frame
  #width and height of the player sprite when scaled up
 frames = []
-
+SPRITE_SIZE = [96,96]
 sprite_sheet = pygame.image.load("images/playersprite.png") #loading the sprite sheet
 
 
@@ -17,7 +17,7 @@ for row in range(4):
     for col in range(4):
         frame = pygame.Surface((PLAYER_SPRITE_FS[0], PLAYER_SPRITE_FS[1]), pygame.SRCALPHA)
         frame.blit(sprite_sheet, (0, 0), (col * PLAYER_SPRITE_FS[0], row * PLAYER_SPRITE_FS[1], PLAYER_SPRITE_FS[0], PLAYER_SPRITE_FS[1]))
-        frame = pygame.transform.scale(frame, PLAYER_SIZE)
+        frame = pygame.transform.scale(frame, SPRITE_SIZE)
         frames.append(frame)
 
 frames = frames[:14]#there are only 14 frames in the sprite sheet, so we slice the list to only include those frames
