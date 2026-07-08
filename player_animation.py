@@ -1,11 +1,12 @@
 import pygame
 import player
+from settings import *
 #FS means frame size, the width and height of each sprite frame [0] = width, [1] = height
 animation_speed = 8 #the number of frames to wait before switching to the next frame of animation, higher it is slower the animation
 animation_frame = 0
 animation_timer = 0
 PLAYER_SPRITE_FS = [32, 32] #width and height of each sprite frame
-PLAYER_SIZE = [96, 96] #width and height of the player sprite when scaled up
+ #width and height of the player sprite when scaled up
 frames = []
 
 sprite_sheet = pygame.image.load("images/playersprite.png") #loading the sprite sheet
