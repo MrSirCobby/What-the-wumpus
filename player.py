@@ -10,14 +10,18 @@ player_direction = "down" #starting direction of the player sprite
 
 
 def button_action(buttons):
-    if buttons[pygame.K_w]:
-        move("up")
-    if buttons[pygame.K_s]:
-        move("down")
-    if buttons[pygame.K_a]:
-        move("left")
-    if buttons[pygame.K_d]:
-        move("right")
+    global player_moving
+    if buttons[pygame.K_w] or buttons[pygame.K_s] or buttons[pygame.K_a] or buttons[pygame.K_d]:
+        if buttons[pygame.K_w]:
+            move("up")
+        if buttons[pygame.K_s]:
+            move("down")
+        if buttons[pygame.K_a]:
+            move("left")
+        if buttons[pygame.K_d]:
+            move("right")
+    else:
+        player_moving = False
 
 def move(direction):
     global player_moving
