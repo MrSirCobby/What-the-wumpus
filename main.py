@@ -1,7 +1,8 @@
 import pygame
 from settings import *
-from player import *
-from rooms import *
+import player
+import rooms
+import player_animation
 pygame.init()
 
 #FS means frame size, the width and height of each sprite frame [0] = width, [1] = height
@@ -17,19 +18,19 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+    
 
     buttons_pressed = pygame.key.get_pressed() #fetches the keys pressed each frame and stores them in a list
-    button_action(buttons_pressed) #function in player.py that adds an action to each key
+    player.button_action(buttons_pressed) #function in player.py that adds an action to each key
 
-    #print(player_position) #debugging function to print the player position to the console
+    #print(player.player_position) #debugging function to print the player position to the console
 
     screen.fill(BACKGROUND_COLOUR) #starting the frame anew with a black background
 
     #player animation
-    player_image = player_moving_animation()
-    screen.blit(player_image, (player_position[0] - player_image.get_width() // 2, player_position[1] - player_image.get_height() // 2))
-
+    player_image = player_animation.player_moving_animation()
+    screen.blit(player_image, (player.player_position[0] - player_image.get_width() // 2, player.player_position[1] - player_image.get_height() // 2))
+    print(player.player_direction)
     pygame.display.flip()
     clock.tick(FPS)
-    animation_timer += 1
 pygame.quit()
