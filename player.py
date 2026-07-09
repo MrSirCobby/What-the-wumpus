@@ -10,7 +10,6 @@ player_moving = False
 player_direction = "down" #starting direction of the player sprite
 
 
-
 def button_action(buttons):
     global player_moving
     global player_direction
