@@ -34,15 +34,11 @@ while running:
     player.button_action(buttons_pressed) #function in player.py that adds an action to each key
 
 
-<<<<<<< HEAD
-    player_collison.update_Phitbox()
-=======
-    player_collison.player_collision()
+    player_collison.update_hitbox()
     
     #update camera to follow player
     game_camera.update(settings.player_position[0], settings.player_position[1])
     
->>>>>>> 3f952dfe1d3ec5d54a37428288cfbda520c8cd06
     #STARTING THE FRAME
     screen.fill(settings.BACKGROUND_COLOUR) #starting the frame anew with a black background
 
@@ -67,14 +63,10 @@ while running:
     player_screen_pos = game_camera.apply(settings.player_position[0], settings.player_position[1]) #this function takes the players position and applies the camera offset to it, so that the player is drawn in the correct position on the screen
     screen.blit(player_image, (player_screen_pos[0]- player_animation.SPRITE_SIZE[0]//2, player_screen_pos[1]- player_animation.SPRITE_SIZE[1]//2)) 
     #print(player.player_position) #debugging function to print the player position to the console
-<<<<<<< HEAD
-    pygame.draw.rect(screen, (255, 0, 0), player_collison.update_Phitbox(), 2)
-=======
     
     # Draw player hitbox with camera offset
-    hitbox_adjusted = game_camera.apply_rect(player_collison.player_collision())
+    hitbox_adjusted = game_camera.apply_rect(player_collison.update_hitbox())
     pygame.draw.rect(screen, (255, 0, 0), hitbox_adjusted, 2)
->>>>>>> 3f952dfe1d3ec5d54a37428288cfbda520c8cd06
     
     pygame.display.flip()
     clock.tick(settings.FPS)
