@@ -6,4 +6,3 @@ wall2 = pygame.Rect(400, 400, 250, 50)
 
 collision_object = [wall1, wall2]
 
-#drawing walls:

@@ -27,7 +27,7 @@ while running:
     player.button_action(buttons_pressed) #function in player.py that adds an action to each key
   
 
-    player_collison.player_collision()
+    player_collison.update_Phitbox()
     #STARTING THE FRAME
     screen.fill(settings.BACKGROUND_COLOUR) #starting the frame anew with a black background
 
@@ -38,7 +38,7 @@ while running:
     player_image = player_animation.player_moving_animation()
     screen.blit(player_image, (settings.player_position[0]- player_animation.SPRITE_SIZE[0]//2, settings.player_position[1]- player_animation.SPRITE_SIZE[1]//2))
     #print(player.player_position) #debugging function to print the player position to the console
-    pygame.draw.rect(screen, (255, 0, 0), player_collison.player_collision(), 2)
+    pygame.draw.rect(screen, (255, 0, 0), player_collison.update_Phitbox(), 2)
     
     pygame.display.flip()
     clock.tick(settings.FPS)
