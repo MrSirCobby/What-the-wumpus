@@ -1,8 +1,8 @@
-SCREEN_WIDTH = 1280
+SCREEN_WIDTH = 720
 SCREEN_HEIGHT = 720
 FPS = 60
 player_speed = 2
-player_position = [640,360]
+player_position = [SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2]
 BACKGROUND_COLOUR = (40, 40, 40)
 PLAYER_SIZE = [42, 56] #width and height of the player hitbox
 TITLE = "FRONTROOMS"

@@ -5,6 +5,7 @@ import rooms
 import player_animation
 import player_collison
 import enviroment
+import camera
 pygame.init()
 
 #NOTE: the players position is calculated from the top left corner of the player sprite, so if the player sprite is 96x96, the player position is 48 pixels away from the center of the player sprite
@@ -15,8 +16,14 @@ pygame.init()
 screen = pygame.display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
 pygame.display.set_caption(settings.TITLE)
 
+#load floor sprite 
+floor_frame = rooms.load_floor_sprite()
+
 clock = pygame.time.Clock()
 running = True
+
+#camera
+game_camera = camera.camera(settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT)
 
 while running:
     for event in pygame.event.get():
@@ -25,20 +32,41 @@ while running:
     #INPUTS
     buttons_pressed = pygame.key.get_pressed() #fetches the keys pressed each frame and stores them in a list
     player.button_action(buttons_pressed) #function in player.py that adds an action to each key
-  
+
 
     player_collison.player_collision()
+    
+    #update camera to follow player
+    game_camera.update(settings.player_position[0], settings.player_position[1])
+    
     #STARTING THE FRAME
     screen.fill(settings.BACKGROUND_COLOUR) #starting the frame anew with a black background
 
+    #draw tiled floor with camera offset
+    floor_size = rooms.SCALED_FLOOR_SIZE
+    #calculate the starting tile position based on camera
+    start_x = int(game_camera.x // floor_size) * floor_size
+    start_y = int(game_camera.y // floor_size) * floor_size
+    #draw floor tiles starting from the calculated position and extending beyond the screen size to ensure coverage
+    for x in range(start_x - floor_size, start_x + settings.SCREEN_WIDTH + floor_size * 2, floor_size):
+        for y in range(start_y - floor_size, start_y + settings.SCREEN_HEIGHT + floor_size * 2, floor_size):
+            adjusted_pos = game_camera.apply(x, y)
+            screen.blit(floor_frame, adjusted_pos)
+
+    # Draw walls with camera offset
     for entity in enviroment.collision_object:
-        pygame.draw.rect(screen, (100, 100, 100), entity)
+        adjusted_rect = game_camera.apply_rect(entity)
+        pygame.draw.rect(screen, (100, 100, 100), adjusted_rect)
 
     #player animation
     player_image = player_animation.player_moving_animation()
-    screen.blit(player_image, (settings.player_position[0]- player_animation.SPRITE_SIZE[0]//2, settings.player_position[1]- player_animation.SPRITE_SIZE[1]//2))
+    player_screen_pos = game_camera.apply(settings.player_position[0], settings.player_position[1]) #this function takes the players position and applies the camera offset to it, so that the player is drawn in the correct position on the screen
+    screen.blit(player_image, (player_screen_pos[0]- player_animation.SPRITE_SIZE[0]//2, player_screen_pos[1]- player_animation.SPRITE_SIZE[1]//2)) 
     #print(player.player_position) #debugging function to print the player position to the console
-    pygame.draw.rect(screen, (255, 0, 0), player_collison.player_collision(), 2)
+    
+    # Draw player hitbox with camera offset
+    hitbox_adjusted = game_camera.apply_rect(player_collison.player_collision())
+    pygame.draw.rect(screen, (255, 0, 0), hitbox_adjusted, 2)
     
     pygame.display.flip()
     clock.tick(settings.FPS)
