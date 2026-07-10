@@ -2,13 +2,14 @@ import random
 import pygame
 
 FLOOR_TILE_SIZE = 32
-FLOOR_SCALE = 4
+FLOOR_SCALE = 3
 SCALED_FLOOR_SIZE = FLOOR_TILE_SIZE * FLOOR_SCALE
 
 def load_floor_sprite():
-    wall_floor_sheet = pygame.image.load("images/wall_floor.png")
+    floors_sheet = pygame.image.load("images/floors.png")
     floor_frame = pygame.Surface((FLOOR_TILE_SIZE, FLOOR_TILE_SIZE), pygame.SRCALPHA)
-    floor_frame.blit(wall_floor_sheet, (0, 0), (0, FLOOR_TILE_SIZE, FLOOR_TILE_SIZE, FLOOR_TILE_SIZE))  # Extract frame 1
+    #Extract frame 1: blit rect is (x_from_sheet, y_from_sheet, width, height)
+    floor_frame.blit(floors_sheet, (0, 0), (0, FLOOR_TILE_SIZE, FLOOR_TILE_SIZE, FLOOR_TILE_SIZE))
 
     #scale floor size
     floor_frame = pygame.transform.scale(floor_frame, (SCALED_FLOOR_SIZE, SCALED_FLOOR_SIZE))
