@@ -6,6 +6,7 @@ import player_animation
 import player_collison
 import enviroment
 import camera
+import enemies
 pygame.init()
 
 #NOTE: the players position is calculated from the top left corner of the player sprite, so if the player sprite is 96x96, the player position is 48 pixels away from the center of the player sprite
@@ -22,6 +23,8 @@ floor_frame = rooms.load_floor_sprite()
 clock = pygame.time.Clock()
 running = True
 
+test_slime = enemies.Enemy(100, 2, 100, 100, 30, 30)
+
 #camera
 game_camera = camera.camera(settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT)
 
@@ -37,7 +40,7 @@ while running:
     player_collison.update_hitbox()
     
     #update camera to follow player
-    game_camera.update(settings.player_position[0], settings.player_position[1])
+    game_camera.update_camera(settings.player_position[0], settings.player_position[1])
     
     #STARTING THE FRAME
     screen.fill(settings.BACKGROUND_COLOUR) #starting the frame anew with a black background
@@ -58,15 +61,22 @@ while running:
         adjusted_rect = game_camera.apply_rect(entity)
         pygame.draw.rect(screen, (100, 100, 100), adjusted_rect)
 
+
     #player animation
     player_image = player_animation.player_moving_animation()
     player_screen_pos = game_camera.apply(settings.player_position[0], settings.player_position[1]) #this function takes the players position and applies the camera offset to it, so that the player is drawn in the correct position on the screen
     screen.blit(player_image, (player_screen_pos[0]- player_animation.SPRITE_SIZE[0]//2, player_screen_pos[1]- player_animation.SPRITE_SIZE[1]//2)) 
     #print(player.player_position) #debugging function to print the player position to the console
+
+
     
     # Draw player hitbox with camera offset
     hitbox_adjusted = game_camera.apply_rect(player_collison.update_hitbox())
     pygame.draw.rect(screen, (255, 0, 0), hitbox_adjusted, 2)
+
+    hitbox_adjusted = game_camera.apply_rect(test_slime.update_hitbox())
+    pygame.draw.rect(screen, (255, 0, 0), hitbox_adjusted, 2)
+
     
     pygame.display.flip()
     clock.tick(settings.FPS)
