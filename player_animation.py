@@ -1,6 +1,6 @@
 import pygame
 import player
-from settings import *
+import settings
 #FS means frame size, the width and height of each sprite frame [0] = width, [1] = height
 animation_speed = 8 #the number of frames to wait before switching to the next frame of animation, higher it is slower the animation
 animation_frame = 0
@@ -10,7 +10,8 @@ PLAYER_SPRITE_FS = [32, 32] #width and height of each sprite frame
 frames = []
 SPRITE_SIZE = [96,96]
 sprite_sheet = pygame.image.load("images/playersprite.png") #loading the sprite sheet
-
+alpha = 255 #opacity of the frame
+flash_time = 150 #the time between flashes
 
 #Cuts each frame out of the sprite sheet and scales it up
 for row in range(4):
@@ -34,6 +35,9 @@ animation = {
 def player_moving_animation():
     global animation_frame
     global animation_timer
+    global flash_time
+    global alpha
+    global current_animation
     if player.player_moving:
         current_animation = animation[player.player_direction]
     else:
@@ -49,5 +53,24 @@ def player_moving_animation():
         animation_frame += 1
         if animation_frame >= len(current_animation): 
             animation_frame = 0
+    
+    if settings.player_vulnerable:
+        alpha = 255
 
-    return frames[current_animation[animation_frame]]
+    else:
+        current_time = pygame.time.get_ticks()
+
+        # Change every 100ms
+        if (current_time) % (2*flash_time) < flash_time:
+            alpha = 255
+        else:
+            alpha = 50
+        
+    opaque_frame = frames[current_animation[animation_frame]].copy()
+    opaque_frame.set_alpha(alpha)  # 0 = invisible, 255 = fully opaque
+    return opaque_frame
+        
+
+
+
+#frames[current_animation[animation_frame]]
