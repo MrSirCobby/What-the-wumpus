@@ -6,6 +6,7 @@ import player_animation
 import player_collison
 import enviroment
 import enemies
+import chest_animation
 pygame.init()
 
 #NOTE: the players position is calculated from the top left corner of the player sprite, so if the player sprite is 96x96, the player position is 48 pixels away from the center of the player sprite
@@ -22,7 +23,7 @@ floor_frame = rooms.load_floor_sprite()
 clock = pygame.time.Clock()
 running = True
 
-test_mimic = enemies.Mimic(100, 100, 30,30 )
+test_mimic = enemies.Mimic(100, 100, 40,30 )
 #camera
 #camera_updated.set_camera(settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT)
 
@@ -40,8 +41,9 @@ while running:
 
     player_collison.update_hitbox()
     
+    player_collison.check_enemy_collision([test_mimic])
     #update camera to follow player
-    #camera_updated.update_camera(settings.player_position[0], settings.player_position[1])
+    print(settings.player_health)
     
     #STARTING THE FRAME
     screen.fill(settings.BACKGROUND_COLOUR) #starting the frame anew with a black background
@@ -61,8 +63,8 @@ while running:
 
 
     #drawing enemies
-    screen.blit(test_mimic.mimic_animation_update(), (test_mimic.get_position()[0]- player_animation.SPRITE_SIZE[0]//2,
-                                test_mimic.get_position()[1]- player_animation.SPRITE_SIZE[1]//2))
+    screen.blit(test_mimic.mimic_animation_update(), (test_mimic.get_position()[0]- chest_animation.CHEST_SPRITE_SIZE[0]//2,
+                                test_mimic.get_position()[1]- chest_animation.CHEST_SPRITE_SIZE[1]//2))
     pygame.draw.rect(screen, (255, 0, 0), test_mimic.return_hitbox(), 2)
     
     # Draw player hitbox with camera offset

@@ -3,13 +3,12 @@ import settings
 import chest_animation
 import math
 import enviroment
-
 debug = False
 
 mimic_health = 100
 mimic_damage = 10
 mimic_speed = 2
-
+#player collision is moved to player_collision.py
 
 detection_radius = 200
 
@@ -30,6 +29,9 @@ class Enemy:
 
     def get_position(self):
         return self.position
+    
+    def get_damage(self):
+        return self.damage
     
     def set_speed(self, new_speed):
         self.speed = new_speed
@@ -119,6 +121,7 @@ class Enemy:
                     #player_hitbox.left = entity.right
                     if debug:
                         print("Stopped moving left")
+
 
     def entity_collision_y(self, dy):
         self.update_hitbox()
