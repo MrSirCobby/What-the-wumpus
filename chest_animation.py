@@ -29,23 +29,3 @@ animation = {
 
 
 
-def mimic_animation_update():
-    global animation_frame
-    global animation_timer
-    if enemies.Mimic.is_moving:
-        current_animation = animation["monster_open"]
-    else:
-        current_animation = animation["closed"]
-
-    if animation_frame >= len(current_animation):
-        animation_frame = 0
-
-    animation_timer += 1
-
-    if animation_timer >= animation_speed: #if the animation timer exceeds the animation speed, it resets the timer and moves to the next frame of animation
-        animation_timer = 0
-        animation_frame += 1
-        if animation_frame >= len(current_animation): 
-            animation_frame = 0
-
-    return frames[current_animation[animation_frame]]

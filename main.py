@@ -22,7 +22,7 @@ floor_frame = rooms.load_floor_sprite()
 clock = pygame.time.Clock()
 running = True
 
-test_slime = enemies.Enemy(100, 2, 100, 100, 30, 30)
+test_mimic = enemies.Mimic(100, 100, 30,30 )
 #camera
 #camera_updated.set_camera(settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT)
 
@@ -34,7 +34,10 @@ while running:
     buttons_pressed = pygame.key.get_pressed() #fetches the keys pressed each frame and stores them in a list
     player.button_action(buttons_pressed) #function in player.py that adds an action to each key
 
-    test_slime.update_hitbox()
+    test_mimic.update_movement()
+    test_mimic.update_hitbox()
+    
+
     player_collison.update_hitbox()
     
     #update camera to follow player
@@ -56,7 +59,11 @@ while running:
     player_image = player_animation.player_moving_animation()
     screen.blit(player_image, (settings.player_position[0]- player_animation.SPRITE_SIZE[0]//2, settings.player_position[1]- player_animation.SPRITE_SIZE[1]//2)) 
 
-    pygame.draw.rect(screen, (255, 0, 0), test_slime.return_hitbox(), 2)
+
+    #drawing enemies
+    screen.blit(test_mimic.mimic_animation_update(), (test_mimic.get_position()[0]- player_animation.SPRITE_SIZE[0]//2,
+                                test_mimic.get_position()[1]- player_animation.SPRITE_SIZE[1]//2))
+    pygame.draw.rect(screen, (255, 0, 0), test_mimic.return_hitbox(), 2)
     
     # Draw player hitbox with camera offset
     pygame.draw.rect(screen, (255, 0, 0), player_collison.update_hitbox(), 2)
