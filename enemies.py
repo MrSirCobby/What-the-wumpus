@@ -29,6 +29,10 @@ class Enemy:
                                   self.position[1] - self.size[1]//2,
                                   self.size[0], 
                                   self.size[1])
+
+    def return_hitbox(self):
+        return self.hitbox    
+    
     def update(self):
         if self.check_in_range():
             self.move_toward_player
