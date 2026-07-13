@@ -25,10 +25,9 @@ clock = pygame.time.Clock()
 running = True
 
 #Instantiate the Torch object
-player_torch = torch.Torch(0, 0)
 
 #Temporary test enemy instance for debugging the Mimic behavior
-test_mimic = enemies.Mimic(100, 100, 40, 30)
+test_mimic = enemies.Chest(100, 100)
 test_mimic.update_hitbox()
 
 while running:
@@ -39,6 +38,7 @@ while running:
     buttons_pressed = pygame.key.get_pressed() #fetches the keys pressed each frame and stores them in a list
     player.button_action(buttons_pressed) #function in player.py that adds an action to each key
 
+    #UPDATE HIBOXES:
     test_mimic.update_movement()
     test_mimic.update_hitbox()
     
@@ -47,7 +47,7 @@ while running:
     
     player_collison.check_enemy_collision([test_mimic])
     #update camera to follow player
-    print(settings.player_health)
+    #print(settings.player_health)
     
     #STARTING THE FRAME
     screen.fill(settings.BACKGROUND_COLOUR) #starting the frame anew with a black background
@@ -56,28 +56,28 @@ while running:
         for x in range(0, settings.SCREEN_WIDTH, rooms.SCALED_FLOOR_SIZE):
             screen.blit(floor_frame, (x, y))
 
-    # Draw walls with camera offset
+    # Draw WALLS
     for entity in enviroment.collision_object:
         pygame.draw.rect(screen, (100, 100, 100), entity)
 
 
     #player animation
-    player_image = player_animation.player_moving_animation()
-    screen.blit(player_image, (settings.player_position[0]- player_animation.SPRITE_SIZE[0]//2, settings.player_position[1]- player_animation.SPRITE_SIZE[1]//2)) 
+    screen.blit(player_animation.player_moving_animation(), (settings.player_position[0]- player_animation.SPRITE_SIZE[0]//2, settings.player_position[1]- player_animation.SPRITE_SIZE[1]//2)) 
 
 
-    #drawing enemies
+    #DRAW ENEMIES
     screen.blit(test_mimic.mimic_animation_update(), (test_mimic.get_position()[0]- chest_animation.CHEST_SPRITE_SIZE[0]//2,
                                 test_mimic.get_position()[1]- chest_animation.CHEST_SPRITE_SIZE[1]//2))
     pygame.draw.rect(screen, (255, 0, 0), test_mimic.return_hitbox(), 2)
     
-    # Draw player hitbox with camera offset
+    #DRAW PLAYER
     pygame.draw.rect(screen, (255, 0, 0), player_collison.update_hitbox(), 2)
     
     #Update torch state (handles internal tracking and frame updates)
-    player_torch.update()
-    #darkness layer
-    player_torch.draw_darkness(screen)
+    #torch.update()
+    #DRAW DARKNESS
+    torch.update_torch_radius()
+    torch.draw_darkness(screen)
 
     
     pygame.display.flip()

@@ -7,10 +7,11 @@ debug = False
 
 mimic_health = 100
 mimic_damage = 10
-mimic_speed = 2
+mimic_speed = 1.5
+mimic_size = [40, 30]
 #player collision is moved to player_collision.py
 
-detection_radius = 180
+detection_radius = 150
 
 
 
@@ -152,32 +153,56 @@ class Slime(Enemy):
         self.speed = 2
 
 class Mimic(Enemy):
-    def __init__(self, positionx, positiony, sizex, sizey):
-        super().__init__(positionx, positiony, sizex, sizey)
+    def __init__(self, positionx, positiony):
+        super().__init__(positionx, positiony, mimic_size[0], mimic_size[1])
         self.health = mimic_health
         self.damage = mimic_damage
         self.speed = mimic_speed
-        self.is_mimic = True
 
     def mimic_animation_update(self):
-        if self.is_mimic:
-            if self.moving == True:
-                current_animation = chest_animation.animation["monster_open"]
-            else:
-                current_animation = chest_animation.animation["closed"]
+        if self.moving == True:
+            current_animation = chest_animation.animation["monster_open"]
+        else:
+            current_animation = chest_animation.animation["closed"]
 
-            if chest_animation.animation_frame >= len(current_animation):
+        if chest_animation.animation_frame >= len(current_animation):
+            chest_animation.animation_frame = 0
+
+        chest_animation.animation_timer += 1
+
+        if chest_animation.animation_timer >= chest_animation.animation_speed: #if the animation timer exceeds the animation speed, it resets the timer and moves to the next frame of animation
+            chest_animation.animation_timer = 0
+            chest_animation.animation_frame += 1
+            if chest_animation.animation_frame >= len(current_animation): 
                 chest_animation.animation_frame = 0
 
-            chest_animation.animation_timer += 1
+        return chest_animation.frames[current_animation[chest_animation.animation_frame]]
+    
+class Chest(Mimic):
+    def __init__(self, position_x, position_y):
+        super().__init__(position_x, position_y)
+        self.open = False
 
-            if chest_animation.animation_timer >= chest_animation.animation_speed: #if the animation timer exceeds the animation speed, it resets the timer and moves to the next frame of animation
-                chest_animation.animation_timer = 0
-                chest_animation.animation_frame += 1
-                if chest_animation.animation_frame >= len(current_animation): 
-                    chest_animation.animation_frame = 0
+        enviroment.interactiables.append(self.return_hitbox)
 
-            return chest_animation.frames[current_animation[chest_animation.animation_frame]]
+    def interact(self):
+        if self.open:
+            self.close_chest
+        else:
+            self.open_chest
+
+    def open_chest(self):
+        print("chest open")
+        #stub
+    
+    def close_chest(self, position_x, position_y):
+        self = Mimic(position_x, position_y)
+
+    def return_hitbox(self):
+        return pygame.Rect(-1000,-1000,0,0)
+    
+    def check_in_range(self):
+        return False
     
         
         
