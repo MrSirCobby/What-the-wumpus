@@ -24,7 +24,7 @@ frames = frames[:7]#there are only 14 frames in the sprite sheet, so we slice th
 animation = {
     "closed":[0],
     "monster_open":[1,2,3],
-    "chest_open":[6,7]
+    "chest_open":[5,6]
 }
 
 

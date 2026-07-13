@@ -1,3 +1,5 @@
+event_get = None
+
 SCREEN_WIDTH = 720
 SCREEN_HEIGHT = 720
 FPS = 60
@@ -9,3 +11,8 @@ BACKGROUND_COLOUR = (40, 40, 40)
 PLAYER_SIZE = [42, 56] #width and height of the player hitbox
 TITLE = "FRONTROOMS"
 player_health = 100
+
+
+#Torch
+battery_level = 100
+torch_is_active = True

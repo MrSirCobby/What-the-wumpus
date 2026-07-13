@@ -29,9 +29,9 @@ running = True
 #Temporary test enemy instance for debugging the Mimic behavior
 test_mimic = enemies.Chest(100, 100)
 test_mimic.update_hitbox()
-
 while running:
-    for event in pygame.event.get():
+    settings.event_get = pygame.event.get()
+    for event in settings.event_get:
         if event.type == pygame.QUIT:
             running = False
     #INPUTS
@@ -39,13 +39,15 @@ while running:
     player.button_action(buttons_pressed) #function in player.py that adds an action to each key
 
     #UPDATE HIBOXES:
-    test_mimic.update_movement()
-    test_mimic.update_hitbox()
+    for enemy in enemies.ENEMY_LIST:
+        enemy.update_movement()
+        test_mimic.update_hitbox()
     
 
     player_collison.update_hitbox()
     
-    player_collison.check_enemy_collision([test_mimic])
+    player_collison.check_enemy_collision(enemies.ENEMY_LIST)
+    print(enemies.ENEMY_LIST)
     #update camera to follow player
     #print(settings.player_health)
     
@@ -66,9 +68,10 @@ while running:
 
 
     #DRAW ENEMIES
-    screen.blit(test_mimic.mimic_animation_update(), (test_mimic.get_position()[0]- chest_animation.CHEST_SPRITE_SIZE[0]//2,
-                                test_mimic.get_position()[1]- chest_animation.CHEST_SPRITE_SIZE[1]//2))
-    pygame.draw.rect(screen, (255, 0, 0), test_mimic.return_hitbox(), 2)
+    for enemy in enemies.ENEMY_LIST:
+        screen.blit(enemy.animation_update(), (enemy.get_position()[0]- enemy.get_size()[0]//2,
+                                    enemy.get_position()[1]- enemy.get_size()[1]//2))
+        pygame.draw.rect(screen, (255, 0, 0), enemy.return_hitbox(), 2)
     
     #DRAW PLAYER
     pygame.draw.rect(screen, (255, 0, 0), player_collison.update_hitbox(), 2)

@@ -13,7 +13,7 @@ mimic_size = [40, 30]
 
 detection_radius = 150
 
-
+ENEMY_LIST = []
 
 class Enemy:
     def __init__(self, positionx, positiony, sizex, sizey):
@@ -24,12 +24,16 @@ class Enemy:
         self.size = [sizex, sizey]
         self.moving = False
         self.detection_radius = detection_radius
+        ENEMY_LIST.append(self)
     
     def set_position(self, position_x, position_y):
         self.position = [position_x, position_y]
 
     def get_position(self):
         return self.position
+    
+    def get_size(self):
+        return self.size
     
     def get_damage(self):
         return self.damage
@@ -44,6 +48,7 @@ class Enemy:
                                   self.size[1])
 
     def return_hitbox(self):
+        self.update_hitbox()
         return self.hitbox    
     
     def update_movement(self):
@@ -159,7 +164,7 @@ class Mimic(Enemy):
         self.damage = mimic_damage
         self.speed = mimic_speed
 
-    def mimic_animation_update(self):
+    def animation_update(self):
         if self.moving == True:
             current_animation = chest_animation.animation["monster_open"]
         else:
@@ -178,32 +183,63 @@ class Mimic(Enemy):
 
         return chest_animation.frames[current_animation[chest_animation.animation_frame]]
     
-class Chest(Mimic):
+class Chest():
     def __init__(self, position_x, position_y):
-        super().__init__(position_x, position_y)
         self.open = False
+        self.position = [position_x, position_y]
+        self.size = mimic_size
+        enviroment.interactiables.append(self)
 
-        enviroment.interactiables.append(self.return_hitbox)
-
-    def interact(self):
-        if self.open:
-            self.close_chest
-        else:
-            self.open_chest
-
-    def open_chest(self):
-        print("chest open")
-        #stub
-    
-    def close_chest(self, position_x, position_y):
-        self = Mimic(position_x, position_y)
+    def update_hitbox(self):
+        self.hitbox = pygame.Rect(self.position[0] - self.size[0]//2, 
+                                  self.position[1] - self.size[1]//2,
+                                  self.size[0], 
+                                  self.size[1])
 
     def return_hitbox(self):
-        return pygame.Rect(-1000,-1000,0,0)
+        self.update_hitbox()
+        return self.hitbox  
+
+    def open_chest(self):
+        self.open = True
+        #print("chest open")
+        #stub
+    
+    def close_chest(self):
+        self.open = False
+        self = Mimic(self.position[0], self.position[1])
+    
+    def interact(self):
+        if self.open:
+            self.close_chest()
+            #print("close chest")
+        else:
+            self.open_chest()
+            #print("chest opening")
+
     
     def check_in_range(self):
         return False
     
+    def mimic_animation_update(self):
+        if self.open == True:
+            current_animation = chest_animation.animation["chest_open"]
+        else:
+            current_animation = chest_animation.animation["closed"]
+
+        if chest_animation.animation_frame >= len(current_animation):
+            chest_animation.animation_frame = 0
+
+        chest_animation.animation_timer += 1
+
+        if chest_animation.animation_timer >= chest_animation.animation_speed: #if the animation timer exceeds the animation speed, it resets the timer and moves to the next frame of animation
+            chest_animation.animation_timer = 0
+            chest_animation.animation_frame += 1
+            if chest_animation.animation_frame >= len(current_animation): 
+                chest_animation.animation_frame = 0
+
+        return chest_animation.frames[current_animation[chest_animation.animation_frame]]
+            
         
         
         
