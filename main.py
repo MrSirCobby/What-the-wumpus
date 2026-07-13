@@ -23,9 +23,15 @@ floor_frame = rooms.load_floor_sprite()
 clock = pygame.time.Clock()
 running = True
 
+<<<<<<< HEAD
+
+#Instantiate the Torch object
+player_torch = torch.Torch(0, 0)
+=======
 test_mimic = enemies.Mimic(100, 100, 40,30 )
 #camera
 #camera_updated.set_camera(settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT)
+>>>>>>> parent of fe38e31 (Darkenss effect)
 
 while running:
     for event in pygame.event.get():
