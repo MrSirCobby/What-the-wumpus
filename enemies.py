@@ -10,7 +10,7 @@ mimic_damage = 10
 mimic_speed = 2
 #player collision is moved to player_collision.py
 
-detection_radius = 200
+detection_radius = 180
 
 
 

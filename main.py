@@ -7,6 +7,7 @@ import player_collison
 import enviroment
 import enemies
 import chest_animation
+import torch
 pygame.init()
 
 #NOTE: the players position is calculated from the top left corner of the player sprite, so if the player sprite is 96x96, the player position is 48 pixels away from the center of the player sprite
@@ -23,15 +24,12 @@ floor_frame = rooms.load_floor_sprite()
 clock = pygame.time.Clock()
 running = True
 
-<<<<<<< HEAD
-
 #Instantiate the Torch object
 player_torch = torch.Torch(0, 0)
-=======
-test_mimic = enemies.Mimic(100, 100, 40,30 )
-#camera
-#camera_updated.set_camera(settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT)
->>>>>>> parent of fe38e31 (Darkenss effect)
+
+#Temporary test enemy instance for debugging the Mimic behavior
+test_mimic = enemies.Mimic(100, 100, 40, 30)
+test_mimic.update_hitbox()
 
 while running:
     for event in pygame.event.get():
@@ -75,6 +73,11 @@ while running:
     
     # Draw player hitbox with camera offset
     pygame.draw.rect(screen, (255, 0, 0), player_collison.update_hitbox(), 2)
+    
+    #Update torch state (handles internal tracking and frame updates)
+    player_torch.update()
+    #darkness layer
+    player_torch.draw_darkness(screen)
 
     
     pygame.display.flip()
