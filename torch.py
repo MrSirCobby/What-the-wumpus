@@ -10,7 +10,7 @@ minimum_torch_radius = 70
 
 
 #fade effect
-torch_ambient_color = (10, 10, 10)
+torch_ambient_colour = (10, 10, 10)
 
 def update_torch_radius():
     global torch_light_radius
@@ -22,11 +22,11 @@ def create_gradient_light():
     #generates a pre-rendered surface containing the smooth radial fade
     mask_size = torch_light_radius* 2
     light_surface = pygame.Surface((mask_size, mask_size))
-    light_surface.fill(torch_ambient_color)
+    light_surface.fill(torch_ambient_colour)
     
     for radius in range(int(torch_light_radius), 0, -1):
         factor = 1.0 - (radius / torch_light_radius)
-        color_val = int(torch_ambient_color[0] + (255 - torch_ambient_color[0]) * factor)
+        color_val = int(torch_ambient_colour[0] + (255 - torch_ambient_colour[0]) * factor)
         color = (color_val, color_val, color_val)
         
         pygame.draw.circle(
@@ -47,7 +47,7 @@ def draw_darkness(screen):
     darkness = pygame.Surface((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
     
     #Fill surface with colour
-    darkness.fill(torch_ambient_color)
+    darkness.fill(torch_ambient_colour)
     
     #centre the pre-rendered gradient onto the player
     mask_x = int(settings.player_position[0]) - torch_light_radius
