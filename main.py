@@ -41,12 +41,12 @@ while running:
     #UPDATE HIBOXES:
     for enemy in enemies.ENEMY_LIST:
         enemy.update_movement()
-        test_mimic.update_hitbox()
+        enemy.update_hitbox()
     
-
     player_collison.update_hitbox()
     
-    player_collison.check_enemy_collision(enemies.ENEMY_LIST)
+    for enemy in enemies.ENEMY_LIST:
+        player_collison.check_enemy_collision(enemy)
     #print(enemies.ENEMY_LIST)
     #update camera to follow player
     #print(settings.player_health)
@@ -71,9 +71,19 @@ while running:
 
     #DRAW ENEMIES
     for enemy in enemies.ENEMY_LIST:
-        screen.blit(enemy.animation_update(), (enemy.get_position()[0]- enemy.get_size()[0]//2,
-                                    enemy.get_position()[1]- enemy.get_size()[1]//2))
+        entity.display_animation(screen)
         pygame.draw.rect(screen, (255, 0, 0), enemy.return_hitbox(), 2)
+
+    #DRAW INTERACTABLES
+    for entity in enviroment.interactiables:
+        entity.display_animation(screen)
+        pygame.draw.rect(screen, (255, 0, 0), entity.return_hitbox(), 2)
+        pygame.draw.circle(
+        screen,
+        (255, 255, 0),
+        (entity.get_position()[0],entity.get_position()[1]),
+        2,2)
+    
     
     #DRAW PLAYER
     pygame.draw.rect(screen, (255, 0, 0), player_collison.update_hitbox(), 2)

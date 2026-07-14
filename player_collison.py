@@ -1,7 +1,6 @@
 import pygame
 import settings
 import enviroment
-import enemies
 debug = False
 damage_tick =0
 def update_hitbox():
@@ -14,15 +13,14 @@ def update_hitbox():
     return player_hitbox
     
 
-def check_enemy_collision(enemy_list):
+def check_enemy_collision(enemy):
     global damage_tick
     if settings.player_vulnerable:
-        for enemy in enemy_list:
-            if player_hitbox.colliderect(enemy.return_hitbox()):
-                settings.player_health -= enemy.get_damage()
-                damage_tick = pygame.time.get_ticks()
-                settings.player_vulnerable = False
-                #change player appearance here
+        if player_hitbox.colliderect(enemy.return_hitbox()):
+            settings.player_health -= enemy.get_damage()
+            damage_tick = pygame.time.get_ticks()
+            settings.player_vulnerable = False
+            #change player appearance here
     
     
     if (pygame.time.get_ticks() - damage_tick) > settings.vulnerable_timer:

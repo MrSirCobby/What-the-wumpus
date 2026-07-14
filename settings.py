@@ -12,6 +12,7 @@ PLAYER_SIZE = [42, 56] #width and height of the player hitbox
 TITLE = "FRONTROOMS"
 player_health = 100
 
+objects = []
 
 #Torch
 battery_level = 100
