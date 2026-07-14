@@ -9,9 +9,14 @@ mimic_health = 100
 mimic_damage = 10
 mimic_speed = 1.5
 mimic_size = [40, 30]
-#player collision is moved to player_collision.py
+mimic_detection_radius = 150
+#player collision is moved to player_collision.p
 
-detection_radius = 150
+slime_health = 60
+slime_damage = 10
+slime_speed = 2
+slime_size = 30,40
+slime_detection_radius = 150
 
 ENEMY_LIST = []
 
@@ -48,7 +53,9 @@ class Enemy(Object):
         self.damage = None
         self.speed = 2
         self.moving = False
-        self.detection_radius = detection_radius
+        self.detection_radius = None
+        self.animation_frame = 0
+        self.animation_timer = 0
         ENEMY_LIST.append(self)
         
     def get_damage(self):
@@ -158,18 +165,12 @@ class Enemy(Object):
         
     
 class Slime(Enemy):
-    def __init__(self, positionx, positiony, sizex, sizey):
-        super().__init__(positionx, positiony, sizex, sizey)
-        self.health = None
-        self.damage = None
-        self.speed = 2
-
-class Mimic(Enemy):
     def __init__(self, positionx, positiony):
-        super().__init__(positionx, positiony, mimic_size[0], mimic_size[1])
-        self.health = mimic_health
-        self.damage = mimic_damage
-        self.speed = mimic_speed
+        super().__init__(positionx, positiony, slime_size[0],slime_size[1])
+        self.health = slime_health
+        self.damage = slime_damage
+        self.speed = slime_speed
+        self.detection_radius = slime_detection_radius
 
     def animation_update(self):
         if self.moving == True:
@@ -189,6 +190,42 @@ class Mimic(Enemy):
                 chest_animation.animation_frame = 0
 
         return chest_animation.frames[current_animation[chest_animation.animation_frame]]
+    
+    def display_animation(self,screen):
+        screen.blit(self.animation_update(), (self.get_position()[0]-chest_animation.CHEST_SPRITE_SIZE[0]//2,
+                                    self.get_position()[1]-chest_animation.CHEST_SPRITE_SIZE[1]//2))
+
+
+
+
+
+class Mimic(Enemy):
+    def __init__(self, positionx, positiony):
+        super().__init__(positionx, positiony, mimic_size[0], mimic_size[1])
+        self.health = mimic_health
+        self.damage = mimic_damage
+        self.speed = mimic_speed
+        
+
+        self.detection_radius = mimic_detection_radius
+    def animation_update(self):
+        if self.moving == True:
+            self.current_animation = chest_animation.animation["monster_open"]
+        else:
+            self.current_animation = chest_animation.animation["closed"]
+
+        if self.animation_frame >= len(self.current_animation):
+            self.animation_frame = 0
+
+        self.animation_timer += 1
+
+        if self.animation_timer >= chest_animation.animation_speed: #if the animation timer exceeds the animation speed, it resets the timer and moves to the next frame of animation
+            self.animation_timer = 0
+            self.animation_frame += 1
+            if self.animation_frame >= len(self.current_animation): 
+                self.animation_frame = 0
+        print(self.animation_frame, self.animation_frames[self.animation_frame])
+        return chest_animation.frames[self.current_animation[self.animation_frame]]
     
     def display_animation(self,screen):
         screen.blit(self.animation_update(), (self.get_position()[0]-chest_animation.CHEST_SPRITE_SIZE[0]//2,
@@ -229,8 +266,8 @@ class Chest(Object):
     
     def animation_update(self):
         
-        animation_frames = chest_animation.animation["chest_open"]
-        
+        self.animation_frames = chest_animation.animation["chest_open"]
+        self.frames = chest_animation.frames
         self.animation_timer += 1
 
         if self.animation_timer >= chest_animation.animation_speed: #if the animation timer exceeds the animation speed, it resets the timer and moves to the next frame of animation
@@ -242,12 +279,12 @@ class Chest(Object):
             #print("update animation")
 
 
-        if self.animation_frame >= len(animation_frames):
-            self.animation_frame = len(animation_frames)-1
+        if self.animation_frame >= len(self.animation_frames):
+            self.animation_frame = len(self.animation_frames)-1
         if self.animation_frame < 0:
             self.animation_frame = 0
-        print(self.animation_frame)
-        return chest_animation.frames[animation_frames[self.animation_frame]]
+        #print(self.animation_frame)
+        return self.frames[self.animation_frames[self.animation_frame]]
     
     def display_animation(self,screen):
         self.animation_update

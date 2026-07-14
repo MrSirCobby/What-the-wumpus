@@ -28,7 +28,7 @@ running = True
 
 #Temporary test enemy instance for debugging the Mimic behavior
 test_mimic = enemies.Chest(100, 100)
-test_mimic.update_hitbox()
+second_mimic = enemies.Chest(300,300)
 while running:
     settings.event_get = pygame.event.get()
     for event in settings.event_get:
@@ -47,9 +47,8 @@ while running:
     
     for enemy in enemies.ENEMY_LIST:
         player_collison.check_enemy_collision(enemy)
-    #print(enemies.ENEMY_LIST)
-    #update camera to follow player
-    #print(settings.player_health)
+    
+    
     
     #STARTING THE FRAME
     screen.fill(settings.BACKGROUND_COLOUR) #starting the frame anew with a black background
@@ -65,27 +64,22 @@ while running:
 
 
 
-    #player animation
-    screen.blit(player_animation.player_moving_animation(), (settings.player_position[0]- player_animation.SPRITE_SIZE[0]//2, settings.player_position[1]- player_animation.SPRITE_SIZE[1]//2)) 
-
 
     #DRAW ENEMIES
     for enemy in enemies.ENEMY_LIST:
-        entity.display_animation(screen)
+        enemy.display_animation(screen)
         pygame.draw.rect(screen, (255, 0, 0), enemy.return_hitbox(), 2)
+
 
     #DRAW INTERACTABLES
     for entity in enviroment.interactiables:
         entity.display_animation(screen)
         pygame.draw.rect(screen, (255, 0, 0), entity.return_hitbox(), 2)
-        pygame.draw.circle(
-        screen,
-        (255, 255, 0),
-        (entity.get_position()[0],entity.get_position()[1]),
-        2,2)
-    
+
+    #wprint(enemies.ENEMY_LIST)
     
     #DRAW PLAYER
+    screen.blit(player_animation.player_moving_animation(), (settings.player_position[0]- player_animation.SPRITE_SIZE[0]//2, settings.player_position[1]- player_animation.SPRITE_SIZE[1]//2)) 
     pygame.draw.rect(screen, (255, 0, 0), player_collison.update_hitbox(), 2)
     
     #Update torch state (handles internal tracking and frame updates)
