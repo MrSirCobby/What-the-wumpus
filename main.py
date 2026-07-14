@@ -19,7 +19,7 @@ screen = pygame.display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT)
 pygame.display.set_caption(settings.TITLE)
 
 #load floor sprite 
-floor_frame = rooms.load_floor_sprite()
+floor_frame = enviroment.load_floor_sprite("brick")
 
 clock = pygame.time.Clock()
 running = True
@@ -47,20 +47,22 @@ while running:
     player_collison.update_hitbox()
     
     player_collison.check_enemy_collision(enemies.ENEMY_LIST)
-    print(enemies.ENEMY_LIST)
+    #print(enemies.ENEMY_LIST)
     #update camera to follow player
     #print(settings.player_health)
     
     #STARTING THE FRAME
     screen.fill(settings.BACKGROUND_COLOUR) #starting the frame anew with a black background
 
-    for y in range(0, settings.SCREEN_HEIGHT, rooms.SCALED_FLOOR_SIZE):
-        for x in range(0, settings.SCREEN_WIDTH, rooms.SCALED_FLOOR_SIZE):
+    for y in range(0, settings.SCREEN_HEIGHT, enviroment.SCALED_FLOOR_SIZE):
+        for x in range(0, settings.SCREEN_WIDTH, enviroment.SCALED_FLOOR_SIZE):
             screen.blit(floor_frame, (x, y))
 
     # Draw WALLS
-    for entity in enviroment.collision_object:
-        pygame.draw.rect(screen, (100, 100, 100), entity)
+    for wall in enviroment.collision_object:
+        pygame.draw.rect(screen, (100, 100, 100), wall)
+
+
 
 
     #player animation
