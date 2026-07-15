@@ -1,6 +1,7 @@
 import pygame
 import settings
 import chest_animation
+import slime_animation
 import math
 import enviroment
 debug = False
@@ -9,13 +10,13 @@ mimic_health = 100
 mimic_damage = 10
 mimic_speed = 1.5
 mimic_size = [40, 30]
-mimic_detection_radius = 150
+mimic_detection_radius = 120
 #player collision is moved to player_collision.p
 
 slime_health = 60
 slime_damage = 10
 slime_speed = 2
-slime_size = 30,40
+slime_size = [30,25]
 slime_detection_radius = 150
 
 ENEMY_LIST = []
@@ -174,28 +175,25 @@ class Slime(Enemy):
 
     def animation_update(self):
         if self.moving == True:
-            current_animation = chest_animation.animation["monster_open"]
+            self.current_animation = slime_animation.animation["moving"]
         else:
-            current_animation = chest_animation.animation["closed"]
+            self.current_animation = slime_animation.animation["idle"]
 
-        if chest_animation.animation_frame >= len(current_animation):
-            chest_animation.animation_frame = 0
+        if self.animation_frame >= len(self.current_animation):
+            self.animation_frame = 0
 
-        chest_animation.animation_timer += 1
+        self.animation_timer += 1
 
-        if chest_animation.animation_timer >= chest_animation.animation_speed: #if the animation timer exceeds the animation speed, it resets the timer and moves to the next frame of animation
-            chest_animation.animation_timer = 0
-            chest_animation.animation_frame += 1
-            if chest_animation.animation_frame >= len(current_animation): 
-                chest_animation.animation_frame = 0
-
-        return chest_animation.frames[current_animation[chest_animation.animation_frame]]
+        if self.animation_timer >= slime_animation.animation_speed: #if the animation timer exceeds the animation speed, it resets the timer and moves to the next frame of animation
+            self.animation_timer = 0
+            self.animation_frame += 1
+            if self.animation_frame >= len(self.current_animation): 
+                self.animation_frame = 0
+        return slime_animation.frames[self.current_animation[self.animation_frame]]
     
     def display_animation(self,screen):
-        screen.blit(self.animation_update(), (self.get_position()[0]-chest_animation.CHEST_SPRITE_SIZE[0]//2,
-                                    self.get_position()[1]-chest_animation.CHEST_SPRITE_SIZE[1]//2))
-
-
+        screen.blit(self.animation_update(), (self.get_position()[0]-slime_animation.SLIME_SPRITE_SIZE[0]//2,
+                                    self.get_position()[1]-slime_animation.SLIME_SPRITE_SIZE[1]//2))
 
 
 
@@ -224,7 +222,6 @@ class Mimic(Enemy):
             self.animation_frame += 1
             if self.animation_frame >= len(self.current_animation): 
                 self.animation_frame = 0
-        print(self.animation_frame, self.animation_frames[self.animation_frame])
         return chest_animation.frames[self.current_animation[self.animation_frame]]
     
     def display_animation(self,screen):

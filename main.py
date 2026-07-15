@@ -28,7 +28,9 @@ running = True
 
 #Temporary test enemy instance for debugging the Mimic behavior
 test_mimic = enemies.Chest(100, 100)
-second_mimic = enemies.Chest(300,300)
+#second_mimic = enemies.Chest(300,300)
+test_slime = enemies.Slime(400,400)
+second_slime = enemies.Slime(200,200)
 while running:
     settings.event_get = pygame.event.get()
     for event in settings.event_get:
