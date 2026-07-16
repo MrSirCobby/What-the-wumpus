@@ -1,40 +1,42 @@
 import random
 import pygame
+import settings
+import enviroment
 
-FLOOR_TILE_SIZE = 32
-FLOOR_SCALE = 3
-SCALED_FLOOR_SIZE = FLOOR_TILE_SIZE * FLOOR_SCALE
 
-def load_floor_sprite():
-    floors_sheet = pygame.image.load("images/floors.png")
-    floor_frame = pygame.Surface((FLOOR_TILE_SIZE, FLOOR_TILE_SIZE), pygame.SRCALPHA)
-    #Extract frame 1: blit rect is (x_from_sheet, y_from_sheet, width, height)
-    floor_frame.blit(floors_sheet, (0, 0), (0, FLOOR_TILE_SIZE, FLOOR_TILE_SIZE, FLOOR_TILE_SIZE))
-
-    #scale floor size
-    floor_frame = pygame.transform.scale(floor_frame, (SCALED_FLOOR_SIZE, SCALED_FLOOR_SIZE))
-    return floor_frame
 
 class Room:
-    def __init__(self, name):
-        self.name = name
-        self.description = None
-        self.linked_caves = []
+    def __init__(self):
+        self.linked_rooms = []
+        self.walls = []
+        self.grid = []
+        self.wall_list = []
+        
+        self.generate_grid()
+        self.append_walls()
+        print(self.wall_list)
 
-    def set_name(self, name):
-        self.name = name
-    def get_name(self):
-        return self.name
-    
-    def set_description(self, description):
-        self.description = description
-    def get_description(self):
-        return self.description
-    
-    def set_linked_caves(self, linked_caves):
-        self.linked_caves = linked_caves
-    def get_linked_caves(self):
-        return self.linked_caves
+    def generate_grid(self):
+        self.grid = [
+    [1,1,1,1,1,1,1,1,1],
+    [1,0,0,0,0,0,0,0,1],
+    [1,0,0,1,0,0,0,0,1],
+    [1,0,0,1,0,2,0,0,1],
+    [1,0,0,1,0,0,0,0,1],
+    [1,0,0,0,0,0,1,0,1],
+    [1,0,3,0,0,0,1,0,1],
+    [1,0,0,0,0,0,0,4,1],
+    [1,1,1,1,1,1,1,1,1]
+]
+    def append_walls(self):
+        for y, row in enumerate(self.grid):
+            for x, tile in enumerate(row):
+                if tile == 1:
+                    self.wall_list.append(pygame.Rect(x - settings.wall_size[0], 
+                                                                   y - settings.wall_size[1],
+                                                                    settings.wall_size[0],
+                                                                    settings.wall_size[1]))
+
 
 
 class TreasureRoom(Room):
@@ -49,3 +51,7 @@ class MonsterRoom(Room):
         super().__init__(name)
         self.monster = True
     #stub
+
+
+
+room_test = Room()
