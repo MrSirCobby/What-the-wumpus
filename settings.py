@@ -12,7 +12,7 @@ PLAYER_SIZE = [42, 56] #width and height of the player hitbox
 TITLE = "FRONTROOMS"
 player_health = 100
 
-wall_size = [96,96]
+TILE_SIZE = [96,96]
 
 objects = []
 

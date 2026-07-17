@@ -31,6 +31,9 @@ test_mimic = enemies.Chest(100, 100)
 #second_mimic = enemies.Chest(300,300)
 test_slime = enemies.Slime(400,400)
 second_slime = enemies.Slime(200,200)
+test_room = rooms.Room()
+test_room.change_active()
+test_room.append_walls()
 while running:
     settings.event_get = pygame.event.get()
     for event in settings.event_get:
@@ -59,9 +62,10 @@ while running:
         for x in range(0, settings.SCREEN_WIDTH, enviroment.SCALED_FLOOR_SIZE):
             screen.blit(floor_frame, (x, y))
 
+    test_room.display_room(screen)
     # Draw WALLS
-    for wall in enviroment.collision_object:
-        pygame.draw.rect(screen, (100, 100, 100), wall)
+    #for wall in enviroment.collision_object:
+        #pygame.draw.rect(screen, (100, 100, 100), wall)
 
 
 

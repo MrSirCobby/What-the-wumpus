@@ -1,5 +1,6 @@
 import pygame
 import wall_textures
+import settings
 #import enemies
 
 interactiables = []
@@ -46,22 +47,20 @@ class Wall:
         self.mask = 0
         self.texture = None
 
-    def check_wall(self, world, x, y):
-        if x < 0 or y < 0:
-            return False
-        if x >= len(world[0]) or y >= len(world):
-            return False
+    def get_grid_position(self):
+        return [self.grid_x, self.grid_y]
+    
+    def get_position(self):
+        self.position = [self.grid_x * settings.TILE_SIZE[0], self.grid_y * settings.TILE_SIZE[1]]
+        return self.position
+    
 
-        return world[y][x] == 1
+    def get_texture(self, grid):
 
-    def get_connections(self, world):
-        x = self.grid_x
-        y = self.grid_y
-
-        left  = self.check_wall(world, x - 1, y)
-        right = self.check_wall(world, x + 1, y)
-        up    = self.check_wall(world, x, y - 1)
-        down  = self.check_wall(world, x, y + 1)
+        left  = self.check_wall(grid, self.grid_x - 1, self.grid_y)
+        right = self.check_wall(grid, self.grid_x + 1, self.grid_y)
+        up    = self.check_wall(grid, self.grid_x, self.grid_y - 1)
+        down  = self.check_wall(grid, self.grid_x, self.grid_y + 1)
 
         #MASK:
         if up: 
@@ -73,17 +72,17 @@ class Wall:
         if left:
             self.mask |= 8
         
-        self.texture = wall_textures.texture_list[wall_textures.corresponding_dict]
-
-
-        return 
+        self.texture = wall_textures.texture_list[wall_textures.corresponding_dict[self.mask]]
+        #print(self.texture)
+        return self.texture
     
+    def check_wall(self, grid, x, y):
+        if x < 0 or y < 0:
+            return False
+        if x >= len(grid[0]) or y >= len(grid):
+            return False
 
-
-
-
-
-
+        return grid[y][x] == 1
 
 
 

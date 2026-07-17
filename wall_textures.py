@@ -4,7 +4,7 @@ WALL_SPRITE_FS = [32, 32] #width and height of each sprite frame
 texture_list = []
 WALL_SPRITE_SIZE = [96,96]
 sprite_sheet = pygame.image.load("images/wall.png") #loading the sprite sheet
-print(sprite_sheet.width,sprite_sheet.height)
+#print(sprite_sheet.width,sprite_sheet.height)
 #print(sprite_sheet.get_width(), sprite_sheet.get_height())
 
 #Cuts each frame out of the sprite sheet and scales it up
@@ -17,13 +17,13 @@ for row in range(4):
 
 texture_list = texture_list[:16]#there are only 14 frames in the sprite sheet, so we slice the list to only include those frames
 
-not_used = {
-    [0,1,3,5,6,7,9,15]#top
-    [0,1,4,5,11,12,14,15] #right
-    [0,2,3,4,5,6,10,11]#bottom
-    [0,1,2,3,4,7,8,14]#left
+#not_used = {
+    #[0,1,3,5,6,7,9,15]#top
+    #[0,1,4,5,11,12,14,15] #right
+    #[0,2,3,4,5,6,10,11]#bottom
+    #[0,1,2,3,4,7,8,14]#left
 
-}
+
 
 corresponding_dict = {
     0:13
