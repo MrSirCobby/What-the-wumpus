@@ -2,6 +2,55 @@ import random
 import pygame
 import settings
 import enviroment
+import wall_textures
+
+class Wall:
+    def __init__(self, grid_x, grid_y):
+        self.grid_position = [grid_x,grid_y]
+        self.mask = 0
+        self.texture = None
+
+    def get_grid_position(self):
+        return [self.grid_position[0], self.grid_position[1]]
+    
+    def get_position(self):
+        self.position = [self.grid_position[0] * settings.TILE_SIZE[0], self.grid_position[1] * settings.TILE_SIZE[1]]
+        #print(self.position)
+        return self.position
+    
+
+    def get_texture(self, grid):
+
+        left  = self.check_wall(grid, self.grid_position[0] - 1, self.grid_position[1])
+        right = self.check_wall(grid, self.grid_position[0] + 1, self.grid_position[1])
+        up    = self.check_wall(grid, self.grid_position[0], self.grid_position[1] - 1)
+        down  = self.check_wall(grid, self.grid_position[0], self.grid_position[1] + 1)
+
+        #MASK:
+        if up == False: 
+            self.mask |= 1
+        if right == False:
+            self.mask |= 2
+        if down == False:
+            self.mask |= 4
+        if left == False:
+            self.mask |= 8
+        
+        self.texture = wall_textures.texture_list[wall_textures.corresponding_dict[self.mask]]
+        #print(self.texture)
+        return self.texture
+    
+    def check_wall(self, grid, x, y):
+        if x < 0 or y < 0:
+            return False
+        if x >= len(grid[0]) or y >= len(grid):
+            return False
+
+        return grid[y][x] == 1
+    
+    def get_hitbox(self):
+        self.hitbox = pygame.Rect(self.get_position()[0],self.get_position()[1], settings.TILE_SIZE[0], settings.TILE_SIZE[1])
+        return self.hitbox
 
 
 class Room:
@@ -9,9 +58,11 @@ class Room:
         self.linked_rooms = []
         self.walls_list = []
         self.grid = []
+        self.wall_display = pygame.Surface((settings.SCREEN_WIDTH,settings.SCREEN_WIDTH),pygame.SRCALPHA)
+        self.collision_objects = []
         
         self.generate_grid()
-        self.append_walls()
+        self.update_walls()
         #print(self.wall_list)
 
     def generate_grid(self):
@@ -30,13 +81,21 @@ class Room:
     def get_grid(self):
         return self.grid
     
-    def append_walls(self):
+    def update_walls(self):
+        self.walls_list = []
         for x, row in enumerate(self.grid):
             for y, tile in enumerate(row):
                 if tile == 1:
-                    wall = enviroment.Wall(y, x)
+                    wall = Wall(y, x)
                     self.walls_list.append(wall)
         
+        for wall in self.walls_list:
+            self.wall_display.blit(wall.get_texture(self.grid), (wall.get_position()[0] - settings.TILE_SIZE[0]//2,
+                                    wall.get_position()[1]- settings.TILE_SIZE[1]//2))
+        
+        for wall in self.walls_list:
+            self.collision_objects.append(wall.get_hitbox())
+
     def change_active(self):
         global active_room
         active_room = self
@@ -45,10 +104,15 @@ class Room:
         return self.walls_list 
 
 
-    def display_room(self, screen):
+    def display_room_unused(self, screen):
         for wall in self.walls_list:
-            screen.blit(wall.get_texture(self.grid), (wall.get_position()[0] - settings.TILE_SIZE[0]//2,
+            self.wall_display.blit(wall.get_texture(self.grid), (wall.get_position()[0] - settings.TILE_SIZE[0]//2,
                                     wall.get_position()[1]- settings.TILE_SIZE[1]//2))
+
+
+    def display_room(self, screen):
+        screen.blit(self.wall_display, (0,0))
+            
             
 
 

@@ -8,7 +8,7 @@ running = True
 
 test_room = rooms.Room()
 test_room.change_active()
-test_room.append_walls()
+test_room.update_walls()
 #print(test_room.walls_list)
 while running:
     settings.event_get = pygame.event.get()

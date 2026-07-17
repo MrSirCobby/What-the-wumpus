@@ -42,34 +42,34 @@ def load_floor_sprite(type):
 
 class Wall:
     def __init__(self, grid_x, grid_y):
-        self.grid_x = grid_x
-        self.grid_y = grid_y
+        self.grid_position = [grid_x,grid_y]
         self.mask = 0
         self.texture = None
 
     def get_grid_position(self):
-        return [self.grid_x, self.grid_y]
+        return [self.grid_position[0], self.grid_position[1]]
     
     def get_position(self):
-        self.position = [self.grid_x * settings.TILE_SIZE[0], self.grid_y * settings.TILE_SIZE[1]]
+        self.position = [self.grid_position[0] * settings.TILE_SIZE[0], self.grid_position[1] * settings.TILE_SIZE[1]]
+        #print(self.position)
         return self.position
     
 
     def get_texture(self, grid):
 
-        left  = self.check_wall(grid, self.grid_x - 1, self.grid_y)
-        right = self.check_wall(grid, self.grid_x + 1, self.grid_y)
-        up    = self.check_wall(grid, self.grid_x, self.grid_y - 1)
-        down  = self.check_wall(grid, self.grid_x, self.grid_y + 1)
+        left  = self.check_wall(grid, self.grid_position[0] - 1, self.grid_position[1])
+        right = self.check_wall(grid, self.grid_position[0] + 1, self.grid_position[1])
+        up    = self.check_wall(grid, self.grid_position[0], self.grid_position[1] - 1)
+        down  = self.check_wall(grid, self.grid_position[0], self.grid_position[1] + 1)
 
         #MASK:
-        if up: 
+        if up == False: 
             self.mask |= 1
-        if right:
+        if right == False:
             self.mask |= 2
-        if down:
+        if down == False:
             self.mask |= 4
-        if left:
+        if left == False:
             self.mask |= 8
         
         self.texture = wall_textures.texture_list[wall_textures.corresponding_dict[self.mask]]
