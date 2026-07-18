@@ -2,6 +2,7 @@ import pygame
 import settings
 import chest_animation
 import slime_animation
+import bat_animation
 import math
 import enviroment
 debug = False
@@ -18,6 +19,13 @@ slime_damage = 10
 slime_speed = 2
 slime_size = [30,25]
 slime_detection_radius = 150
+
+bat_health = 20
+bat_damage = 5
+bat_speed = 3
+bat_size = [20, 20]
+bat_detection_radius = 110
+
 
 ENEMY_LIST = []
 
@@ -127,7 +135,7 @@ class Enemy(Object):
     
     def entity_collision_x(self, dx):
         self.update_hitbox()
-        for entity in enviroment.collision_object:
+        for entity in settings.active_room.get_collision_objects():
             if self.hitbox.colliderect(entity):
                 if debug:
                     print(f"Collision detected on X axis! dx={dx}")
@@ -194,6 +202,33 @@ class Slime(Enemy):
     def display_animation(self,screen):
         screen.blit(self.animation_update(), (self.get_position()[0]-slime_animation.SLIME_SPRITE_SIZE[0]//2,
                                     self.get_position()[1]-slime_animation.SLIME_SPRITE_SIZE[1]//2))
+        
+class Bat(Enemy):
+    def __init__(self, positionx, positiony):
+        super().__init__(positionx, positiony, bat_size[0], bat_size[1])
+        self.health = bat_health
+        self.damage = bat_damage
+        self.speed = bat_speed
+        self.detection_radius = bat_detection_radius
+
+    def animation_update(self):
+        self.current_animation = bat_animation.animation["flapping"]
+
+        if self.animation_frame >= len(self.current_animation):
+            self.animation_frame = 0
+
+        self.animation_timer += 1
+
+        if self.animation_timer >= bat_animation.animation_speed: #if the animation timer exceeds the animation speed, it resets the timer and moves to the next frame of animation
+            self.animation_timer = 0
+            self.animation_frame += 1
+            if self.animation_frame >= len(self.current_animation): 
+                self.animation_frame = 0
+        return bat_animation.frames[self.current_animation[self.animation_frame]]
+    
+    def display_animation(self,screen):
+        screen.blit(self.animation_update(), (self.get_position()[0]-bat_animation.BAT_SPRITE_SIZE[0]//2,
+                                    self.get_position()[1]-bat_animation.BAT_SPRITE_SIZE[1]//2))
 
 
 
@@ -287,7 +322,8 @@ class Chest(Object):
         self.animation_update
         screen.blit(self.animation_update(), (self.get_position()[0]-chest_animation.CHEST_SPRITE_SIZE[0]//2,
                                     self.get_position()[1]-chest_animation.CHEST_SPRITE_SIZE[1]//2))
-            
+    
+
         
         
         

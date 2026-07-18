@@ -31,6 +31,7 @@ running = True
 #second_mimic = enemies.Chest(300,300)
 #test_slime = enemies.Slime(400,400)
 #second_slime = enemies.Slime(200,200)
+test_bat = enemies.Bat(300,300)
 test_room = rooms.Room()
 test_room.change_active()
 test_room.update_walls()
