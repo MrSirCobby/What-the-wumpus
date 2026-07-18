@@ -36,7 +36,7 @@ def check_enemy_collision(enemy):
 def player_entity_check_x(dx):
     global debug
     update_hitbox()
-    for entity in rooms.active_room.get_collision_objects():
+    for entity in settings.active_room.get_collision_objects():
         if player_hitbox.colliderect(entity):
             if debug:
                 print(f"Collision detected on X axis! dx={dx}")
@@ -56,7 +56,7 @@ def player_entity_check_x(dx):
 def player_entity_check_y(dy):
     global debug
     update_hitbox()
-    for entity in rooms.active_room.get_collision_objects():
+    for entity in settings.active_room.get_collision_objects():
         if player_hitbox.colliderect(entity):
             if debug:
                 print(f"Collision detected on Y axis! dy={dy}")

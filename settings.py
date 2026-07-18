@@ -1,5 +1,5 @@
 event_get = None
-
+active_room = None
 SCREEN_WIDTH = 720
 SCREEN_HEIGHT = 720
 FPS = 60

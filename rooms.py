@@ -4,10 +4,9 @@ import settings
 import enviroment
 import wall_textures
 
-class Wall:
+class Tile_Object:
     def __init__(self, grid_x, grid_y):
         self.grid_position = [grid_x,grid_y]
-        self.mask = 0
         self.texture = None
         self.position = [
             self.grid_position[0] * settings.TILE_SIZE[0],
@@ -20,6 +19,21 @@ class Wall:
     def get_position(self):
         return self.position
     
+    def get_hitbox(self):
+        self.hitbox = pygame.Rect(
+            self.position[0] - settings.TILE_SIZE[0] // 2,
+            self.position[1] - settings.TILE_SIZE[1] // 2,
+            settings.TILE_SIZE[0],
+            settings.TILE_SIZE[1]
+        )
+
+        return self.hitbox
+
+class Wall(Tile_Object):
+    def __init__(self, grid_x, grid_y):
+        super().__init__(grid_x, grid_y)
+        self.mask = 0
+        self.texture = None
 
     def get_texture(self, grid):
 
@@ -50,15 +64,30 @@ class Wall:
 
         return grid[y][x] == 1
     
-    def get_hitbox(self):
-        self.hitbox = pygame.Rect(
-            self.position[0] - settings.TILE_SIZE[0] // 2,
-            self.position[1] - settings.TILE_SIZE[1] // 2,
-            settings.TILE_SIZE[0],
-            settings.TILE_SIZE[1]
-        )
 
-        return self.hitbox
+class Door(Tile_Object):
+    def __init__(self, grid_x, grid_y, direction):
+        super().__init__(self, grid_x, grid_y)
+        self.direction = direction
+        self.is_open = False
+        self.texture = None
+        
+    
+    def get_texture(self):
+        if self.direction == "up":
+            pass
+        if self.direction == "right":
+            pass
+        if self.direction == "down":
+            pass
+        if self.direction == "left":
+            pass
+    def interact_with(self):
+        pass
+
+
+    
+    
     
 
 class Room:
@@ -68,6 +97,13 @@ class Room:
         self.grid = []
         self.wall_display = pygame.Surface((settings.SCREEN_WIDTH,settings.SCREEN_WIDTH),pygame.SRCALPHA)
         self.collision_objects = []
+        self.interactables = []
+        self.linked_rooms = {
+            "north": None,
+            "east": None,
+            "south": None,
+            "west": None
+            }
         
         self.generate_grid()
         self.update_walls()
@@ -112,9 +148,7 @@ class Room:
             #enviroment.collision_object.append(hitbox)
 
     def change_active(self):
-        global active_room
-        active_room = self
-
+        settings.active_room = self
 
     def get_wall_list(self):
         return self.walls_list 
@@ -146,8 +180,8 @@ class MonsterRoom(Room):
 
 
 
-room_test = Room()
-room_test.change_active()
-room_test.generate_grid()
-room_test.update_walls()
-print(active_room.get_collision_objects())
+#room_test = Room()
+#room_test.change_active()
+#room_test.generate_grid()
+#room_test.update_walls()
+#print(active_room.get_collision_objects())
