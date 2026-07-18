@@ -1,4 +1,6 @@
 import pygame
+import settings
+
 WALL_SPRITE_FS = [32, 32] #width and height of each sprite frame
  #width and height of the player sprite when scaled up
 texture_list = []

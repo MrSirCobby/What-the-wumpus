@@ -65,7 +65,8 @@ while running:
     test_room.display_room(screen)
     # Draw WALLS
     #for wall in enviroment.collision_object:
-        #pygame.draw.rect(screen, (100, 100, 100), wall)
+       # pygame.draw.rect(screen, (250, 100, 100), wall)
+    
 
 
 

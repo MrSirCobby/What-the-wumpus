@@ -14,9 +14,10 @@ class Wall:
         return [self.grid_position[0], self.grid_position[1]]
     
     def get_position(self):
-        self.position = [self.grid_position[0] * settings.TILE_SIZE[0], self.grid_position[1] * settings.TILE_SIZE[1]]
-        #print(self.position)
-        return self.position
+        return [
+            self.grid_position[0] * settings.TILE_SIZE[0] + settings.TILE_SIZE[0] // 2,
+            self.grid_position[1] * settings.TILE_SIZE[1] + settings.TILE_SIZE[1] // 2
+        ]
     
 
     def get_texture(self, grid):
@@ -49,7 +50,15 @@ class Wall:
         return grid[y][x] == 1
     
     def get_hitbox(self):
-        self.hitbox = pygame.Rect(self.get_position()[0],self.get_position()[1], settings.TILE_SIZE[0], settings.TILE_SIZE[1])
+        position = self.get_position()
+
+        self.hitbox = pygame.Rect(
+            position[0] - settings.TILE_SIZE[0] // 2,
+            position[1] - settings.TILE_SIZE[1] // 2,
+            settings.TILE_SIZE[0],
+            settings.TILE_SIZE[1]
+        )
+
         return self.hitbox
 
 
@@ -83,6 +92,9 @@ class Room:
     
     def update_walls(self):
         self.walls_list = []
+        self.collision_objects = []
+        enviroment.collision_object = []
+
         for x, row in enumerate(self.grid):
             for y, tile in enumerate(row):
                 if tile == 1:
@@ -90,11 +102,16 @@ class Room:
                     self.walls_list.append(wall)
         
         for wall in self.walls_list:
-            self.wall_display.blit(wall.get_texture(self.grid), (wall.get_position()[0] - settings.TILE_SIZE[0]//2,
-                                    wall.get_position()[1]- settings.TILE_SIZE[1]//2))
+            # We use WALL_SPRITE_SIZE to perfectly centre the graphic over the hitbox
+            draw_x = wall.get_position()[0] - wall_textures.WALL_SPRITE_SIZE[0] // 2
+            draw_y = wall.get_position()[1] - wall_textures.WALL_SPRITE_SIZE[1] // 2
+            
+            self.wall_display.blit(wall.get_texture(self.grid), (draw_x, draw_y))
         
         for wall in self.walls_list:
-            self.collision_objects.append(wall.get_hitbox())
+            hitbox = wall.get_hitbox()
+            self.collision_objects.append(hitbox)
+            enviroment.collision_object.append(hitbox)
 
     def change_active(self):
         global active_room

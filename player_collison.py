@@ -49,6 +49,7 @@ def player_entity_check_x(dx):
                 #player_hitbox.left = entity.right
                 if debug:
                     print("Stopped moving left")
+            update_hitbox()
 
 
 def player_entity_check_y(dy):
@@ -68,3 +69,4 @@ def player_entity_check_y(dy):
                 #player_hitbox.top = entity.bottom
                 if debug:
                     print("Stopped moving up")
+            update_hitbox()
