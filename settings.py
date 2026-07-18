@@ -13,7 +13,7 @@ TITLE = "FRONTROOMS"
 player_health = 100
 
 TILE_SIZE = [SCREEN_WIDTH/8,SCREEN_HEIGHT/8]
-print(TILE_SIZE)
+#print(TILE_SIZE)
 
 objects = []
 

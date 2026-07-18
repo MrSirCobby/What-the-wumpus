@@ -9,15 +9,16 @@ class Wall:
         self.grid_position = [grid_x,grid_y]
         self.mask = 0
         self.texture = None
+        self.position = [
+            self.grid_position[0] * settings.TILE_SIZE[0],
+            self.grid_position[1] * settings.TILE_SIZE[1]
+        ]
 
     def get_grid_position(self):
         return [self.grid_position[0], self.grid_position[1]]
     
     def get_position(self):
-        return [
-            self.grid_position[0] * settings.TILE_SIZE[0] + settings.TILE_SIZE[0] // 2,
-            self.grid_position[1] * settings.TILE_SIZE[1] + settings.TILE_SIZE[1] // 2
-        ]
+        return self.position
     
 
     def get_texture(self, grid):
@@ -50,17 +51,15 @@ class Wall:
         return grid[y][x] == 1
     
     def get_hitbox(self):
-        position = self.get_position()
-
         self.hitbox = pygame.Rect(
-            position[0] - settings.TILE_SIZE[0] // 2,
-            position[1] - settings.TILE_SIZE[1] // 2,
+            self.position[0] - settings.TILE_SIZE[0] // 2,
+            self.position[1] - settings.TILE_SIZE[1] // 2,
             settings.TILE_SIZE[0],
             settings.TILE_SIZE[1]
         )
 
         return self.hitbox
-
+    
 
 class Room:
     def __init__(self):
@@ -109,22 +108,20 @@ class Room:
             self.wall_display.blit(wall.get_texture(self.grid), (draw_x, draw_y))
         
         for wall in self.walls_list:
-            hitbox = wall.get_hitbox()
-            self.collision_objects.append(hitbox)
-            enviroment.collision_object.append(hitbox)
+            self.collision_objects.append(wall.get_hitbox())
+            #enviroment.collision_object.append(hitbox)
 
     def change_active(self):
         global active_room
         active_room = self
 
+
     def get_wall_list(self):
         return self.walls_list 
+    
+    def get_collision_objects(self):
+        return self.collision_objects
 
-
-    def display_room_unused(self, screen):
-        for wall in self.walls_list:
-            self.wall_display.blit(wall.get_texture(self.grid), (wall.get_position()[0] - settings.TILE_SIZE[0]//2,
-                                    wall.get_position()[1]- settings.TILE_SIZE[1]//2))
 
 
     def display_room(self, screen):
@@ -150,3 +147,7 @@ class MonsterRoom(Room):
 
 
 room_test = Room()
+room_test.change_active()
+room_test.generate_grid()
+room_test.update_walls()
+print(active_room.get_collision_objects())

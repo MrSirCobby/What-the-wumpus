@@ -3,7 +3,7 @@ import settings
 import player_collison
 import enviroment
 import math
-pygame.init()
+#pygame.init()
 global player_moving
 player_moving = False
  #starting position of the player
