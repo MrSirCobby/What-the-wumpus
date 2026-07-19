@@ -16,6 +16,8 @@ TILE_SIZE = [SCREEN_WIDTH/8,SCREEN_HEIGHT/8]
 #print(TILE_SIZE)
 
 objects = []
+key_list = []
+required_keys = ["yellow", "blue", "green", "pink"]
 
 #Torch
 battery_level = 100

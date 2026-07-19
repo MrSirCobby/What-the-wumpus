@@ -4,6 +4,9 @@ import settings
 import floor_textures
 import wall_textures
 import door_animation
+import chest_animation
+import enemies
+import player_collison
 
 class Tile_Object:
     def __init__(self, grid_x, grid_y):
@@ -70,48 +73,115 @@ class Door(Tile_Object):
     def __init__(self, grid_x, grid_y, direction):
         super().__init__(grid_x, grid_y)
         self.direction = direction
-        self.is_locked = True
+        self.is_locked = False
         self.is_open = False
         self.texture = None
+        self.animation_frame = 0
+        self.animation_timer = 0
+
 
         
     
     def animation_update(self):
         if self.is_locked:
-            self.current_animation = door_animation.animation[(self.direction, "locked")]
+            self.animation_frames = door_animation.animation[(self.direction, "locked")]
         else:
-            if self.is_open:
-                self.current_animation = door_animation.animation[(self.direction, "open")]
-            else:
-                self.current_animation = door_animation.animation[(self.direction, "closed")]
+        
+            self.animation_frames = door_animation.animation[(self.direction, "open")]
 
-        if self.animation_frame >= len(self.current_animation):
-            self.animation_frame = 0
-
+        self.frames = door_animation.frames
         self.animation_timer += 1
 
         if self.animation_timer >= door_animation.animation_speed: #if the animation timer exceeds the animation speed, it resets the timer and moves to the next frame of animation
             self.animation_timer = 0
-            self.animation_frame += 1
-            if self.animation_frame >= len(self.current_animation): 
-                self.animation_frame = 0
-        return door_animation.frames[self.current_animation[self.animation_frame]]
+            if self.is_open:
+                self.animation_frame += 1
+            else:
+                self.animation_frame -= 1
+            #print("update animation")
+
+
+        if self.animation_frame >= len(self.animation_frames):
+            self.animation_frame = len(self.animation_frames)-1
+        if self.animation_frame < 0:
+            self.animation_frame = 0
+        #print(self.animation_frame)
+        return self.frames[self.animation_frames[self.animation_frame]]
     
 
     def interact(self):
-    
+        #print("door interact")
         if self.is_locked:
             if all(item in settings.key_list for item in settings.required_keys):
                 self.is_locked = False
         else:
             if self.is_open:
-                pass
+                self.is_open = False
             else:
                 self.is_open = True
 
 
+
+class Chest(enemies.Object):
+    def __init__(self, grid_x, grid_y):
+        super().__init__(grid_x * settings.TILE_SIZE[0],grid_y * settings.TILE_SIZE[1], enemies.mimic_size[0],enemies.mimic_size[1])
+        self.open = False
+        self.animation_frame = 0
+        self.animation_timer = 0
+
+
+    def open_chest(self):
+        self.open = True
+        #print("chest open")
+        #stub
     
+    def close_chest(self):
+        self.open = False
+        self.__class__ = enemies.Mimic
+        enemies.Mimic.__init__(self, self.position[0],self.position[1])
+        settings.active_room.interactiables_remove(self)
+        #print("close chest")
     
+    def interact(self):
+        if self.open:
+            self.close_chest()
+            #print("close chest")
+        else:
+            self.open_chest()
+            #print("chest opening")
+
+    
+    def check_in_range(self):
+        return False
+    
+    def animation_update(self):
+        
+        self.animation_frames = chest_animation.animation["chest_open"]
+        self.frames = chest_animation.frames
+        self.animation_timer += 1
+
+        if self.animation_timer >= chest_animation.animation_speed: #if the animation timer exceeds the animation speed, it resets the timer and moves to the next frame of animation
+            self.animation_timer = 0
+            if self.open:
+                self.animation_frame += 1
+            else:
+                self.animation_frame -= 1
+            #print("update animation")
+
+
+        if self.animation_frame >= len(self.animation_frames):
+            self.animation_frame = len(self.animation_frames)-1
+        if self.animation_frame < 0:
+            self.animation_frame = 0
+        #print(self.animation_frame)
+        return self.frames[self.animation_frames[self.animation_frame]]
+    
+
+    def display_animation(self,screen):
+        self.animation_update
+        screen.blit(self.animation_update(), (self.get_position()[0]-chest_animation.CHEST_SPRITE_SIZE[0]//2,
+                                    self.get_position()[1]-chest_animation.CHEST_SPRITE_SIZE[1]//2))
+    #UNUSED ^^^^
     
 
 class Room:
@@ -124,6 +194,8 @@ class Room:
         self.floor_type = "brick"
         self.collision_objects = []
         self.interactables = []
+        self.enemy_list = []
+        self.item_list = []
         self.linked_rooms = {
             "north": None,
             "east": None,
@@ -133,14 +205,14 @@ class Room:
         
         
         self.generate_grid()
-        self.update_walls()
+        self.update_room()
         #print(self.wall_list)
 
     def generate_grid(self):
         self.grid = [
     [1,1,1,1,2,1,1,1,1],
     [1,0,0,0,0,0,0,0,1],
-    [1,0,0,1,0,0,0,0,1],
+    [1,0,0,1,0,0,3,0,1],
     [1,0,0,1,0,0,0,0,1],
     [2,0,0,1,0,0,0,0,2],
     [1,0,0,0,0,0,1,0,1],
@@ -152,17 +224,21 @@ class Room:
     def get_grid(self):
         return self.grid
     
-    def update_walls(self):
+    def update_room(self):
         self.walls_list = []
         self.collision_objects = []
-        floor_textures.collision_object = []
+        self.doors_list = []
+        self.interactables = []
+        self.item_list = []
+        self.enemy_list = []
+    
 
         for y, row in enumerate(self.grid):
             for x, tile in enumerate(row):
-                if tile == 1:
+                if tile == 1: #WALLS
                     wall = Wall(x, y)
                     self.walls_list.append(wall)
-                if tile == 2:
+                if tile == 2: #DOORS
                     if y == 0:
                         direction = "north"
                     if x == 8:
@@ -173,30 +249,55 @@ class Room:
                         direction = "west"
                     door = Door(x,y, direction)
                     self.doors_list.append(door)
+                if tile == 3: #CHEST
+                    chest = Chest(x,y)
+                    self.interactables.append(chest)
+                    self.item_list.append(chest)
+
+                    
         
         
 
         for wall in self.walls_list:
             self.collision_objects.append(wall.get_hitbox())
             #enviroment.collision_object.append(hitbox)
-
-
+        
         for door in self.doors_list:
-            #self.room_display.blit(wall.get_texture(self.grid), (, ))
-            pass
-        for door in self.doors_list:
+            self.interactables.append(door)
             self.collision_objects.append(door.get_hitbox())
 
+        for enemy in self.enemy_list:
+            player_collison.check_enemy_collision(enemy)
+
+
     def update_room_display(self):
+        self.update_room()
+        self.room_display.fill(settings.BACKGROUND_COLOUR)
+        #FLOOR
         for y in range(0, settings.SCREEN_HEIGHT, floor_textures.SCALED_FLOOR_SIZE):
             for x in range(0, settings.SCREEN_WIDTH, floor_textures.SCALED_FLOOR_SIZE):
                 self.room_display.blit(floor_textures.load_floor_sprite(self.floor_type),(x, y))
-
+        
+        #WALLS
         for wall in self.walls_list:
             # We use WALL_SPRITE_SIZE to perfectly centre the graphic over the hitbox
             draw_x = wall.get_position()[0] - wall_textures.WALL_SPRITE_SIZE[0] // 2
             draw_y = wall.get_position()[1] - wall_textures.WALL_SPRITE_SIZE[1] // 2
             self.room_display.blit(wall.get_texture(self.grid), (draw_x, draw_y))
+
+        #DOORS
+        for door in self.doors_list:
+            self.room_display.blit(door.animation_update(),
+                                   (door.get_position()[0] - door_animation.DOOR_SPRITE_SIZE[0]//2,
+                                    door.get_position()[1] - door_animation.DOOR_SPRITE_SIZE[1]//2))
+        
+        for item in self.item_list:
+            #self.room_display.blit(item.animation_update())
+            item.display_animation(self.room_display)
+
+        for enemy in self.enemy_list:
+            self.room_display.blit(enemy.animation_update())
+
 
 
     def change_active(self):
@@ -213,8 +314,6 @@ class Room:
     
     def get_interactables(self):
         return self.interactables
-
-
 
     def display_room(self, screen):
         self.update_room_display()

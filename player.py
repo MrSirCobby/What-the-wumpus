@@ -1,7 +1,7 @@
 import pygame
 import settings
 import player_collison
-import floor_textures
+#import floor_textures
 import math
 #import rooms
 #pygame.init()
@@ -43,7 +43,9 @@ def button_action(buttons):
 
 
 def check_interactables():
-    for entity in settings.active_room.get_interactiables:
+    print(settings.active_room.get_interactables())
+    for entity in settings.active_room.get_interactables():
+        #print("check interact")
         dx = settings.player_position[0] - entity.get_position()[0]
         dy = settings.player_position[1] - entity.get_position()[1]
         distance = math.sqrt(dx**2 + dy**2)

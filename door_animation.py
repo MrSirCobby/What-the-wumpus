@@ -6,7 +6,7 @@ animation_timer = 0
 DOOR_SPRITE_FS = [32, 32] #width and height of each sprite frame
  #width and height of the player sprite when scaled up
 frames = []
-DOOR_SPRITE_SIZE = [64,64]
+DOOR_SPRITE_SIZE = [156,156]
 sprite_sheet = pygame.image.load("images/door.png") #loading the sprite sheet
 
 #print(sprite_sheet.get_width(), sprite_sheet.get_height())
@@ -23,14 +23,10 @@ frames = frames[:15]#there are only 14 frames in the sprite sheet, so we slice t
 
 animation = {
     ("north", "locked"): [0],
-    ("east", "locket") : [13],
+    ("east", "locked") : [13],
     ("south", "locked") : [5],
     ("west", "locked"): [9],
 
-    ("north", "closed") : [1],
-    ("east", "closed") : [10],
-    ("south", "closed") : [2],
-    ("west", "closed") : [12],
 
     ("north", "open") : [1,3,4,6],
     ("east", "open") : [10],
