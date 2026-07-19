@@ -1,8 +1,9 @@
 import random
 import pygame
 import settings
-import enviroment
+import floor_textures
 import wall_textures
+import door_animation
 
 class Tile_Object:
     def __init__(self, grid_x, grid_y):
@@ -67,23 +68,46 @@ class Wall(Tile_Object):
 
 class Door(Tile_Object):
     def __init__(self, grid_x, grid_y, direction):
-        super().__init__(self, grid_x, grid_y)
+        super().__init__(grid_x, grid_y)
         self.direction = direction
+        self.is_locked = True
         self.is_open = False
         self.texture = None
+
         
     
-    def get_texture(self):
-        if self.direction == "up":
-            pass
-        if self.direction == "right":
-            pass
-        if self.direction == "down":
-            pass
-        if self.direction == "left":
-            pass
-    def interact_with(self):
-        pass
+    def animation_update(self):
+        if self.is_locked:
+            self.current_animation = door_animation.animation[(self.direction, "locked")]
+        else:
+            if self.is_open:
+                self.current_animation = door_animation.animation[(self.direction, "open")]
+            else:
+                self.current_animation = door_animation.animation[(self.direction, "closed")]
+
+        if self.animation_frame >= len(self.current_animation):
+            self.animation_frame = 0
+
+        self.animation_timer += 1
+
+        if self.animation_timer >= door_animation.animation_speed: #if the animation timer exceeds the animation speed, it resets the timer and moves to the next frame of animation
+            self.animation_timer = 0
+            self.animation_frame += 1
+            if self.animation_frame >= len(self.current_animation): 
+                self.animation_frame = 0
+        return door_animation.frames[self.current_animation[self.animation_frame]]
+    
+
+    def interact(self):
+    
+        if self.is_locked:
+            if all(item in settings.key_list for item in settings.required_keys):
+                self.is_locked = False
+        else:
+            if self.is_open:
+                pass
+            else:
+                self.is_open = True
 
 
     
@@ -94,8 +118,10 @@ class Room:
     def __init__(self):
         self.linked_rooms = []
         self.walls_list = []
+        self.doors_list = []
         self.grid = []
-        self.wall_display = pygame.Surface((settings.SCREEN_WIDTH,settings.SCREEN_WIDTH),pygame.SRCALPHA)
+        self.room_display = pygame.Surface((settings.SCREEN_WIDTH,settings.SCREEN_WIDTH),pygame.SRCALPHA)
+        self.floor_type = "brick"
         self.collision_objects = []
         self.interactables = []
         self.linked_rooms = {
@@ -105,21 +131,22 @@ class Room:
             "west": None
             }
         
+        
         self.generate_grid()
         self.update_walls()
         #print(self.wall_list)
 
     def generate_grid(self):
         self.grid = [
-    [1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,2,1,1,1,1],
     [1,0,0,0,0,0,0,0,1],
     [1,0,0,1,0,0,0,0,1],
-    [1,0,0,1,0,2,0,0,1],
     [1,0,0,1,0,0,0,0,1],
+    [2,0,0,1,0,0,0,0,2],
     [1,0,0,0,0,0,1,0,1],
-    [1,0,3,0,0,0,1,0,1],
-    [1,0,0,0,0,0,0,4,1],
-    [1,1,1,1,1,1,1,1,1]
+    [1,0,0,0,0,0,1,0,1],
+    [1,0,0,0,0,0,0,0,1],
+    [1,1,1,1,2,1,1,1,1]
 ]   
     
     def get_grid(self):
@@ -128,24 +155,49 @@ class Room:
     def update_walls(self):
         self.walls_list = []
         self.collision_objects = []
-        enviroment.collision_object = []
+        floor_textures.collision_object = []
 
-        for x, row in enumerate(self.grid):
-            for y, tile in enumerate(row):
+        for y, row in enumerate(self.grid):
+            for x, tile in enumerate(row):
                 if tile == 1:
-                    wall = Wall(y, x)
+                    wall = Wall(x, y)
                     self.walls_list.append(wall)
+                if tile == 2:
+                    if y == 0:
+                        direction = "north"
+                    if x == 8:
+                        direction = "east"
+                    if y == 8:
+                        direction = "south"
+                    if x == 0:
+                        direction = "west"
+                    door = Door(x,y, direction)
+                    self.doors_list.append(door)
         
+        
+
+        for wall in self.walls_list:
+            self.collision_objects.append(wall.get_hitbox())
+            #enviroment.collision_object.append(hitbox)
+
+
+        for door in self.doors_list:
+            #self.room_display.blit(wall.get_texture(self.grid), (, ))
+            pass
+        for door in self.doors_list:
+            self.collision_objects.append(door.get_hitbox())
+
+    def update_room_display(self):
+        for y in range(0, settings.SCREEN_HEIGHT, floor_textures.SCALED_FLOOR_SIZE):
+            for x in range(0, settings.SCREEN_WIDTH, floor_textures.SCALED_FLOOR_SIZE):
+                self.room_display.blit(floor_textures.load_floor_sprite(self.floor_type),(x, y))
+
         for wall in self.walls_list:
             # We use WALL_SPRITE_SIZE to perfectly centre the graphic over the hitbox
             draw_x = wall.get_position()[0] - wall_textures.WALL_SPRITE_SIZE[0] // 2
             draw_y = wall.get_position()[1] - wall_textures.WALL_SPRITE_SIZE[1] // 2
-            
-            self.wall_display.blit(wall.get_texture(self.grid), (draw_x, draw_y))
-        
-        for wall in self.walls_list:
-            self.collision_objects.append(wall.get_hitbox())
-            #enviroment.collision_object.append(hitbox)
+            self.room_display.blit(wall.get_texture(self.grid), (draw_x, draw_y))
+
 
     def change_active(self):
         settings.active_room = self
@@ -155,11 +207,18 @@ class Room:
     
     def get_collision_objects(self):
         return self.collision_objects
+    
+    def append_interactables(self, interactable):
+        self.interactables.append(interactable)
+    
+    def get_interactables(self):
+        return self.interactables
 
 
 
     def display_room(self, screen):
-        screen.blit(self.wall_display, (0,0))
+        self.update_room_display()
+        screen.blit(self.room_display, (0,0))
             
             
 

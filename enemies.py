@@ -4,7 +4,7 @@ import chest_animation
 import slime_animation
 import bat_animation
 import math
-import enviroment
+#import floor_textures
 debug = False
 
 mimic_health = 100
@@ -154,7 +154,7 @@ class Enemy(Object):
 
     def entity_collision_y(self, dy):
         self.update_hitbox()
-        for entity in enviroment.collision_object:
+        for entity in settings.active_room.get_collision_objects():
             if self.hitbox.colliderect(entity):
                 if debug:
                     print(f"Collision detected on Y axis! dy={dy}")
@@ -267,7 +267,7 @@ class Chest(Object):
     def __init__(self, position_x, position_y):
         super().__init__(position_x,position_y, mimic_size[0],mimic_size[1])
         self.open = False
-        enviroment.interactiables.append(self)
+        settings.active_room.interactiables_append(self)
         self.animation_frame = 0
         self.animation_timer = 0
 
@@ -281,7 +281,7 @@ class Chest(Object):
         self.open = False
         self.__class__ = Mimic
         Mimic.__init__(self, self.position[0],self.position[1])
-        enviroment.interactiables.remove(self)
+        settings.active_room.interactiables_remove(self)
         #print("close chest")
     
     def interact(self):

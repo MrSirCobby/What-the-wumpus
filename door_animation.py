@@ -9,23 +9,36 @@ frames = []
 DOOR_SPRITE_SIZE = [64,64]
 sprite_sheet = pygame.image.load("images/door.png") #loading the sprite sheet
 
-print(sprite_sheet.get_width(), sprite_sheet.get_height())
+#print(sprite_sheet.get_width(), sprite_sheet.get_height())
 
 #Cuts each frame out of the sprite sheet and scales it up
-for row in range(3):
+for row in range(5):
     for col in range(3):
         frame = pygame.Surface((DOOR_SPRITE_FS[0], DOOR_SPRITE_FS[1]), pygame.SRCALPHA)
         frame.blit(sprite_sheet, (0, 0), (col * DOOR_SPRITE_FS[0], row * DOOR_SPRITE_FS[1], DOOR_SPRITE_FS[0], DOOR_SPRITE_FS[1]))
         frame = pygame.transform.scale(frame, DOOR_SPRITE_SIZE)
         frames.append(frame)
 
-frames = frames[:7]#there are only 14 frames in the sprite sheet, so we slice the list to only include those frames
+frames = frames[:15]#there are only 14 frames in the sprite sheet, so we slice the list to only include those frames
 
 animation = {
-    "closed":[0],
-    "monster_open":[1,2,3],
-    "chest_open":[4,5,6]
+    ("north", "locked"): [0],
+    ("east", "locket") : [13],
+    ("south", "locked") : [5],
+    ("west", "locked"): [9],
+
+    ("north", "closed") : [1],
+    ("east", "closed") : [10],
+    ("south", "closed") : [2],
+    ("west", "closed") : [12],
+
+    ("north", "open") : [1,3,4,6],
+    ("east", "open") : [10],
+    ("south", "open" ) : [2],
+    ("west", "open") : [12],
+
 }
+
 
 
 

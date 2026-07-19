@@ -1,6 +1,6 @@
 import pygame
 import settings
-import enviroment
+#import floor_textures
 import rooms
 debug = False
 damage_tick =0

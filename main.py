@@ -4,7 +4,7 @@ import player
 import rooms
 import player_animation
 import player_collison
-import enviroment
+import floor_textures
 import enemies
 import chest_animation
 import torch
@@ -19,7 +19,7 @@ screen = pygame.display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT)
 pygame.display.set_caption(settings.TITLE)
 
 #load floor sprite 
-floor_frame = enviroment.load_floor_sprite("brick")
+
 
 clock = pygame.time.Clock()
 running = True
@@ -59,9 +59,8 @@ while running:
     #STARTING THE FRAME
     screen.fill(settings.BACKGROUND_COLOUR) #starting the frame anew with a black background
 
-    for y in range(0, settings.SCREEN_HEIGHT, enviroment.SCALED_FLOOR_SIZE):
-        for x in range(0, settings.SCREEN_WIDTH, enviroment.SCALED_FLOOR_SIZE):
-            screen.blit(floor_frame, (x, y))
+    
+            
 
     test_room.display_room(screen)
     # Draw WALLS
@@ -80,7 +79,7 @@ while running:
 
 
     #DRAW INTERACTABLES
-    for entity in enviroment.interactiables:
+    for entity in settings.active_room.get_interactables():
         entity.display_animation(screen)
         pygame.draw.rect(screen, (255, 0, 0), entity.return_hitbox(), 2)
 
