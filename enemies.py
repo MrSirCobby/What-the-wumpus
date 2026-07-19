@@ -266,6 +266,7 @@ class Mimic(Enemy):
 class Chest(Object):
     def __init__(self, position_x, position_y):
         super().__init__(position_x,position_y, mimic_size[0],mimic_size[1])
+        print("using enemies.py chest class")
         self.open = False
         settings.active_room.interactiables_append(self)
         self.animation_frame = 0

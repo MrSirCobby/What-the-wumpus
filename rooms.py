@@ -151,21 +151,24 @@ class Chest(enemies.Object):
             #print("chest opening")
 
     
-    def check_in_range(self):
-        return False
+    #def check_in_range(self):
+        #return False
     
     def animation_update(self):
-        
+        print(self.animation_timer)
         self.animation_frames = chest_animation.animation["chest_open"]
         self.frames = chest_animation.frames
         self.animation_timer += 1
+        
 
         if self.animation_timer >= chest_animation.animation_speed: #if the animation timer exceeds the animation speed, it resets the timer and moves to the next frame of animation
-            self.animation_timer = 0
+            #self.animation_timer = 0
             if self.open:
                 self.animation_frame += 1
+                print("plus 1")
             else:
                 self.animation_frame -= 1
+                print("minus 1")
             #print("update animation")
 
 
@@ -291,9 +294,13 @@ class Room:
                                    (door.get_position()[0] - door_animation.DOOR_SPRITE_SIZE[0]//2,
                                     door.get_position()[1] - door_animation.DOOR_SPRITE_SIZE[1]//2))
         
+    
         for item in self.item_list:
-            #self.room_display.blit(item.animation_update())
-            item.display_animation(self.room_display)
+            #print(item.get_position())
+            self.room_display.blit(item.animation_update(),
+                                   (item.get_position()[0],
+                                   item.get_position()[1]))
+            #item.display_animation(self.room_display)
 
         for enemy in self.enemy_list:
             self.room_display.blit(enemy.animation_update())
