@@ -43,13 +43,13 @@ def button_action(buttons):
 
 
 def check_interactables():
-    print(settings.active_room.get_interactables())
+    #print(settings.active_room.get_interactables())
     for entity in settings.active_room.get_interactables():
-        #print("check interact")
         dx = settings.player_position[0] - entity.get_position()[0]
         dy = settings.player_position[1] - entity.get_position()[1]
         distance = math.sqrt(dx**2 + dy**2)
         if distance <= interactiable_radius:
+            #print("interacted")
             entity.interact()
 
 def move(direction):
