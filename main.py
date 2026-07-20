@@ -9,6 +9,7 @@ import enemies
 import chest_animation
 import torch
 pygame.init()
+font = pygame.font.Font("images/pixel_font.ttf", 28)
 
 #NOTE: the players position is calculated from the top left corner of the player sprite, so if the player sprite is 96x96, the player position is 48 pixels away from the center of the player sprite
 
@@ -89,6 +90,9 @@ while running:
     torch.update_torch_radius()
     torch.draw_darkness(screen)
 
+    health_value = max(0, int(settings.player_health))
+    health_text = font.render(f"Light Level: {health_value}", True, (255, 255, 255))
+    screen.blit(health_text, (40, settings.SCREEN_HEIGHT - 60))
     
     pygame.display.flip()
     clock.tick(settings.FPS)
