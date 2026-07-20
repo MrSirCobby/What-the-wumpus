@@ -19,7 +19,7 @@ for row in range(3):
         frame = pygame.transform.scale(frame, DOOR_SPRITE_SIZE)
         frames.append(frame)
 
-frames = frames[:4]#there are only 14 frames in the sprite sheet, so we slice the list to only include those frames
+frames = frames[:5]#there are only 14 frames in the sprite sheet, so we slice the list to only include those frames
 
 animation = {
     "locked": [0],

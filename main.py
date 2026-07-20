@@ -83,7 +83,10 @@ while running:
 
     controls = small_font.render("Controls: WASD to move, SPACE to interact", True, (255, 255, 255))
     screen.blit(controls, (20, settings.SCREEN_HEIGHT - 700))
-    
+    if settings.game_finished:
+        end_screen = pygame.image.load("images/escaped_screen.png")
+        end_screen = pygame.transform.scale(end_screen, (settings.SCREEN_WIDTH,settings.SCREEN_HEIGHT))
+        screen.blit(end_screen, (0, 0))
     pygame.display.flip()
     clock.tick(settings.FPS)
-pygame.quit()
+

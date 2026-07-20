@@ -82,7 +82,7 @@ class End_Door(Tile_Object):
                 self.is_locked = False
         else:
             if self.is_open:
-                self.is_open = False
+                settings.game_finished = True
             else:
                 self.is_open = True
 
@@ -181,6 +181,7 @@ class Door(Tile_Object):
         #print("door interact")
         
         if self.is_open:
+            self.is_open = False
             change_room(self.direction)
         else:
             self.is_open = True
@@ -193,6 +194,7 @@ class Chest(enemies.Object):
         self.open = False
         self.animation_frame = 0
         self.animation_timer = 0
+        self.grid_position = [grid_x,grid_y]
 
 
     def open_chest(self):
@@ -204,6 +206,7 @@ class Chest(enemies.Object):
         self.open = False
         self.__class__ = enemies.Mimic
         enemies.Mimic.__init__(self, self.position[0]+self.size[0]//2,self.position[1]+self.size[1]//2)
+        settings.active_room.enemy_list.append(self)
         settings.active_room.interactables.remove(self)
         settings.active_room.item_list.remove(self)
         #print("close chest")
@@ -211,10 +214,13 @@ class Chest(enemies.Object):
     def interact(self):
         if self.open:
             self.close_chest()
-            print("close chest")
+            #print("close chest")
         else:
             self.open_chest()
-            print("chest opening")
+            batt = battery.Battery(self.grid_position[0],self.grid_position[1])
+            settings.active_room.item_list.append(batt)
+            settings.active_room.interactables.append(batt)
+            #print("chest opening")
 
     
     #def check_in_range(self):
@@ -319,6 +325,7 @@ class Room:
                 if tile == 7: #END DOOR
                     end_door = End_Door(x,y)
                     self.doors_list.append(end_door)
+                
 
         
 
@@ -465,7 +472,7 @@ class Maze_Room(Room):
     [1,1,1,1,2,1,1,1,1],
     [1,0,0,0,0,1,1,0,1],
     [1,0,1,0,1,3,1,0,1],
-    [1,0,0,1,0,0,1,0,1],
+    [1,0,0,0,0,0,1,0,1],
     [2,0,1,1,1,0,1,0,2],
     [1,0,1,0,0,0,1,0,1],
     [1,0,1,1,1,0,1,0,1],
@@ -505,7 +512,7 @@ rooms = {
     (0, 0): Spawn_Room(),
     (1, 0): Treasure_Room(),
     (2, 0): Monster_Room(),
-    (3, 0): Key_Room(),
+    (3, 0): End_Room(),
 
     (0, 1): Monster_Room(),
     (1, 1): Key_Room(),
@@ -520,7 +527,7 @@ rooms = {
     (0, 3): Treasure_Room(),
     (1, 3): Monster_Room(),
     (2, 3): Maze_Room(),
-    (3, 3): End_Room(),
+    (3, 3): Key_Room(),
 }
 
 

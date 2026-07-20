@@ -4,7 +4,7 @@ SCREEN_WIDTH = 720
 SCREEN_HEIGHT = 720
 FPS = 60
 player_speed = 5
-player_position = [SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2]
+player_position = [360, 620]
 player_vulnerable = True
 vulnerable_timer = 2000 #in milliseconds
 BACKGROUND_COLOUR = (40, 40, 40)
@@ -22,3 +22,4 @@ required_keys = ["yellow", "blue", "green", "pink"]
 #Torch
 battery_level = 100
 torch_is_active = True
+game_finished = False
