@@ -1,7 +1,6 @@
 import pygame
 import settings
 #import floor_textures
-import rooms
 debug = False
 damage_tick =0
 def update_hitbox():

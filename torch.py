@@ -15,7 +15,7 @@ torch_ambient_colour = (10, 10, 10)
 
 def update_torch_radius():
     global torch_light_radius
-    settings.player_health -= torch_drain
+    #settings.player_health -= torch_drain
     torch_light_radius = max(settings.player_health * 2.5, minimum_torch_radius)
     if settings.player_health <= 0:
         torch_light_radius = 0
