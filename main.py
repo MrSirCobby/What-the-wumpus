@@ -54,6 +54,8 @@ while running:
     
     for enemy in enemies.ENEMY_LIST:
         player_collison.check_enemy_collision(enemy)
+
+    player.check_pickup_collision()
     
     
     

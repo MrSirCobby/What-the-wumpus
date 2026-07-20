@@ -8,6 +8,7 @@ import chest_animation
 import key_texture
 import enemies
 import player_collison
+import battery
 
 class Tile_Object:
     def __init__(self, grid_x, grid_y):
@@ -238,7 +239,7 @@ class Room:
     [1,0,0,1,0,0,0,0,1],
     [2,0,0,1,0,0,0,0,2],
     [1,0,6,0,0,0,1,0,1],
-    [1,0,0,0,0,0,1,0,1],
+    [1,0,0,7,0,0,1,0,1],
     [1,0,0,0,0,0,0,0,1],
     [1,1,1,1,2,1,1,1,1]
 ]   
@@ -285,7 +286,10 @@ class Room:
                     key = Key(x,y,"yellow")
                     self.item_list.append(key)
                     self.interactables.append(key)
-
+                if tile == 7:#BATTERY
+                    battery_pickup = battery.Battery(x,y)
+                    self.item_list.append(battery_pickup)
+                    self.interactables.append(battery_pickup)
 
 
 
@@ -329,11 +333,12 @@ class Room:
         
         #ITEMS
         for item in self.item_list:
-            #print(item.get_position())
-            self.room_display.blit(item.animation_update(),
-                                   (item.get_position()[0],
-                                   item.get_position()[1]))
-            #item.display_animation(self.room_display)
+            texture = item.animation_update()
+            if hasattr(item, "get_draw_position"):
+                draw_x, draw_y = item.get_draw_position()
+            else:
+                draw_x, draw_y = item.get_position()
+            self.room_display.blit(texture, (draw_x, draw_y))
 
         #ENEMIES
         for enemy in self.enemy_list:
