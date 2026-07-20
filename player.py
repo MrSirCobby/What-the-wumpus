@@ -52,6 +52,17 @@ def check_interactables():
             #print("interacted")
             entity.interact()
 
+
+def check_pickup_collision():
+    if settings.active_room is None:
+        return
+
+    player_hitbox = player_collison.update_hitbox()
+    for entity in list(settings.active_room.get_interactables()):
+        if hasattr(entity, "get_hitbox") and player_hitbox.colliderect(entity.get_hitbox()):
+            entity.interact()
+            break
+
 def move(direction):
     global player_moving
     global player_direction

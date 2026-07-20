@@ -320,7 +320,6 @@ class Chest(Object):
         return self.frames[self.animation_frames[self.animation_frame]]
     
     def display_animation(self,screen):
-        self.animation_update
         screen.blit(self.animation_update(), (self.get_position()[0]-chest_animation.CHEST_SPRITE_SIZE[0]//2,
                                     self.get_position()[1]-chest_animation.CHEST_SPRITE_SIZE[1]//2))
     
