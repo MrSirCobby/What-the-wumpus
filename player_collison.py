@@ -15,6 +15,7 @@ def update_hitbox():
     
 
 def check_enemy_collision(enemy):
+    update_hitbox()
     global damage_tick
     if settings.player_vulnerable:
         if player_hitbox.colliderect(enemy.return_hitbox()):

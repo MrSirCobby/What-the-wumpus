@@ -57,25 +57,21 @@ while running:
     
     
     #STARTING THE FRAME
+
+
+
     screen.fill(settings.BACKGROUND_COLOUR) #starting the frame anew with a black background
 
     
-            
-
-    test_room.display_room(screen)
+    settings.active_room.display_room(screen)
     # Draw WALLS
     #for wall in enviroment.collision_object:
        # pygame.draw.rect(screen, (250, 100, 100), wall)
-    
-
-
-
-
 
     #DRAW ENEMIES
-    for enemy in enemies.ENEMY_LIST:
-        enemy.display_animation(screen)
-        pygame.draw.rect(screen, (255, 0, 0), enemy.return_hitbox(), 2)
+    #for enemy in enemies.ENEMY_LIST:
+    #    enemy.display_animation(screen)
+    #    pygame.draw.rect(screen, (255, 0, 0), enemy.return_hitbox(), 2)
 
 
     #DRAW INTERACTABLES
