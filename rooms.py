@@ -271,22 +271,7 @@ class Room:
         
         #print(self.wall_list)
 
-<<<<<<< HEAD
  
-=======
-    def generate_grid(self):
-        self.grid = [
-    [1,1,1,1,2,1,1,1,1],
-    [1,0,0,0,0,0,0,0,1],
-    [1,0,5,1,0,0,3,0,1],
-    [1,0,0,1,0,0,0,0,1],
-    [2,0,0,1,0,0,0,0,2],
-    [1,0,6,0,0,0,1,0,1],
-    [1,0,0,7,0,0,1,0,1],
-    [1,0,0,0,0,0,0,0,1],
-    [1,1,1,1,2,1,1,1,1]
-]   
->>>>>>> 84f75b9c27037d6b04a0e421d92595e55c91696c
     
     def get_grid(self):
         return self.grid
@@ -331,22 +316,10 @@ class Room:
                     key = Key(x,y,"yellow")
                     self.item_list.append(key)
                     self.interactables.append(key)
-<<<<<<< HEAD
                 if tile == 7: #END DOOR
                     end_door = End_Door(x,y)
                     self.doors_list.append(end_door)
 
-=======
-                if tile == 7:#BATTERY
-                    battery_pickup = battery.Battery(x,y)
-                    self.item_list.append(battery_pickup)
-                    self.interactables.append(battery_pickup)
-
-
-
-                    
-        
->>>>>>> 84f75b9c27037d6b04a0e421d92595e55c91696c
         
 
         for wall in self.walls_list:
