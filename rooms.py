@@ -42,7 +42,7 @@ class End_Door(Tile_Object):
     def __init__(self, grid_x, grid_y):
         super().__init__(grid_x, grid_y)
 
-        self.is_locked = False
+        self.is_locked = True
         self.is_open = False
         self.texture = None
         self.animation_frame = 0
@@ -82,11 +82,12 @@ class End_Door(Tile_Object):
         if self.is_locked:
             if all(item in settings.key_list for item in settings.required_keys):
                 self.is_locked = False
+            return
+
+        if self.is_open:
+            settings.game_finished = True
         else:
-            if self.is_open:
-                settings.game_finished = True
-            else:
-                self.is_open = True
+            self.is_open = True
 
     
 class Key(Tile_Object):

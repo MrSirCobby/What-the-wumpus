@@ -64,10 +64,14 @@ def draw_interaction_prompt(screen):
     #if the closest interactable is within range, draw the prompt above it
     if closest_interactable is not None:
         x, y = closest_interactable.get_position()
-        prompt_text = prompt_font.render("Double Tap SPACE", True, (255, 255, 255))
+        if isinstance(closest_interactable, rooms.End_Door):
+            collected_keys = len(set(settings.key_list))
+            prompt_text = prompt_font.render(f"{collected_keys}/{len(settings.required_keys)} keys", True, (255, 255, 255))
+        else:
+            prompt_text = prompt_font.render("Double Tap SPACE", True, (255, 255, 255))
         text_width = prompt_text.get_width()
         text_height = prompt_text.get_height()
-        
+
         if hasattr(closest_interactable, "get_size"):
             size_x, size_y = closest_interactable.get_size()
             anchor_y = y - max(24, size_y // 2 + 6)
