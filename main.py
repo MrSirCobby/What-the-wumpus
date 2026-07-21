@@ -174,7 +174,7 @@ while running:
     else:
         objective_lines = [
             "Objective: Find the 4 coloured keys.",
-            f"Progress: {collected_keys}/{len(settings.required_keys)} keys found ({keys_needed} left)."
+            f"Progress: {collected_keys}/{len(settings.required_keys)} keys found"
         ]
 
     objective_box_y = 20
