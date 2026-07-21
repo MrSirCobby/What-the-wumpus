@@ -275,6 +275,7 @@ class Room:
         self.load_room()
         
         
+        
         #print(self.wall_list)
 
  
@@ -319,7 +320,11 @@ class Room:
                     bat = enemies.Bat(x*settings.TILE_SIZE[0], y * settings.TILE_SIZE[1])
                     self.enemy_list.append(bat)
                 if tile == 6:#KEY
-                    key = Key(x,y,"yellow")
+                    colour = settings.required_keys[settings.key_counter]
+                    settings.key_counter += 1
+                    if settings.key_counter > 3:
+                        settings.key_counter = 3
+                    key = Key(x,y,colour)
                     self.item_list.append(key)
                     self.interactables.append(key)
                 if tile == 7: #END DOOR
@@ -439,7 +444,7 @@ class Key_Room(Room):
     [1,1,1,1,2,1,1,1,1],
     [1,0,0,0,0,0,0,0,1],
     [1,0,1,0,1,0,1,0,1],
-    [1,0,0,1,6,0,0,0,1],
+    [1,0,0,0,6,0,0,0,1],
     [2,0,1,1,0,0,1,0,2],
     [1,0,0,4,0,0,1,0,1],
     [1,0,1,0,1,1,1,0,1],
@@ -537,7 +542,7 @@ settings.active_room = rooms[current_room_position]
 
 def change_room(direction):
     global current_room_position
-
+    settings.player_vulnerable = True
     x, y = current_room_position
 
     if direction == "north":

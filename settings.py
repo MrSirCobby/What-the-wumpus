@@ -23,3 +23,4 @@ required_keys = ["yellow", "blue", "green", "pink"]
 battery_level = 100
 torch_is_active = True
 game_finished = False
+key_counter = 0

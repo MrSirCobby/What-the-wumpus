@@ -69,7 +69,7 @@ while running:
     
     #DRAW PLAYER
     screen.blit(player_animation.player_moving_animation(), (settings.player_position[0]- player_animation.SPRITE_SIZE[0]//2, settings.player_position[1]- player_animation.SPRITE_SIZE[1]//2)) 
-    pygame.draw.rect(screen, (255, 0, 0), player_collison.update_hitbox(), 2)
+    #pygame.draw.rect(screen, (255, 0, 0), player_collison.update_hitbox(), 2)
     
     #Update torch state (handles internal tracking and frame updates)
     #torch.update()
