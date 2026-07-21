@@ -10,6 +10,8 @@ import key_texture
 import enemies
 import player_collison
 import battery
+import player
+import torch
 
 class Tile_Object:
     def __init__(self, grid_x, grid_y):
@@ -539,6 +541,50 @@ rooms = {
 current_room_position = (0, 0)
 settings.active_room = rooms[current_room_position]
 #print(settings.active_room.walls_list)
+
+def reset_game_state():
+    global current_room_position
+    global rooms
+
+    settings.objects = []
+    settings.key_list = []
+    settings.required_keys = ["yellow", "blue", "green", "pink"]
+    settings.key_counter = 0
+    settings.game_finished = False
+    settings.player_health = 100
+    settings.player_position = [settings.SCREEN_WIDTH // 2, settings.SCREEN_HEIGHT // 2]
+    settings.player_vulnerable = True
+    settings.vulnerable_timer = 2000
+    player.player_moving = False
+    player.player_direction = "down"
+    torch.torch_light_radius = 300
+    enemies.ENEMY_LIST = []
+
+    rooms = {
+        (0, 0): Spawn_Room(),
+        (1, 0): Treasure_Room(),
+        (2, 0): Monster_Room(),
+        (3, 0): End_Room(),
+
+        (0, 1): Monster_Room(),
+        (1, 1): Key_Room(),
+        (2, 1): Maze_Room(),
+        (3, 1): Treasure_Room(),
+
+        (0, 2): Key_Room(),
+        (1, 2): Maze_Room(),
+        (2, 2): Monster_Room(),
+        (3, 2): Key_Room(),
+
+        (0, 3): Treasure_Room(),
+        (1, 3): Monster_Room(),
+        (2, 3): Maze_Room(),
+        (3, 3): Key_Room(),
+    }
+
+    current_room_position = (0, 0)
+    settings.active_room = rooms[current_room_position]
+
 
 def change_room(direction):
     global current_room_position
