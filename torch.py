@@ -6,7 +6,7 @@ import settings
     
 torch_light_radius = 300 #The radius of the torch light circle (increase for a larger view)
 minimum_torch_radius = 70
-torch_drain = 0.02
+torch_drain = 0.01
 
 
 

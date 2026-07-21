@@ -48,8 +48,9 @@ class Battery:
         )
 
     def interact(self):
-        settings.battery_level = min(100, settings.battery_level + 25)
-        settings.player_health = min(100, settings.player_health + 25)
+        settings.battery_level = min(100, settings.battery_level + 50)
+        settings.player_health = min(100, settings.player_health + 50)
+        settings.pickup_message_timer = 120
 
         if settings.active_room is not None:
             if self in settings.active_room.item_list:

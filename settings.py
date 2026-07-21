@@ -24,3 +24,5 @@ battery_level = 100
 torch_is_active = True
 game_finished = False
 key_counter = 0
+pickup_message = ""
+pickup_message_timer = 0

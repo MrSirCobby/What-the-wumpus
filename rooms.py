@@ -507,33 +507,97 @@ class End_Room(Room):
         super().__init__()
         
 
+class Safe_Room(Room):
+    """A quiet resting room with tile flooring and a central chest with no enemies."""
+    def __init__(self):
+        self.grid = [
+            [1,1,1,1,2,1,1,1,1],
+            [1,0,0,0,0,0,0,0,1],
+            [1,0,1,1,0,1,1,0,1],
+            [1,0,1,0,0,0,1,0,1],
+            [2,0,0,0,3,0,0,0,2],
+            [1,0,1,0,0,0,1,0,1],
+            [1,0,1,1,0,1,1,0,1],
+            [1,0,0,0,0,0,0,0,1],
+            [1,1,1,1,2,1,1,1,1]
+        ]
+        super().__init__()
+        self.floor_type = "tile"  # Changes floor texture to tile
 
 
+class Bat_Nest_Room(Room):
+    """A high-danger room filled with bats and wooden floor tiles."""
+    def __init__(self):
+        self.grid = [
+            [1,1,1,1,2,1,1,1,1],
+            [1,5,0,0,0,0,0,5,1],
+            [1,0,1,0,0,0,1,0,1],
+            [1,0,0,5,0,5,0,0,1],
+            [2,0,0,0,0,0,0,0,2],
+            [1,0,0,5,0,5,0,0,1],
+            [1,0,1,0,0,0,1,0,1],
+            [1,5,0,0,0,0,0,5,1],
+            [1,1,1,1,2,1,1,1,1]
+        ]
+        super().__init__()
+        self.floor_type = "wood"  # Changes floor texture to wood
 
 
+class Armory_Room(Room):
+    """A storage room with multiple chests guarded by slimes."""
+    def __init__(self):
+        self.grid = [
+            [1,1,1,1,2,1,1,1,1],
+            [1,3,0,1,0,1,0,3,1],
+            [1,0,0,1,0,1,0,0,1],
+            [1,1,0,0,0,0,0,1,1],
+            [2,0,4,0,0,0,4,0,2],
+            [1,1,0,0,0,0,0,1,1],
+            [1,0,0,1,0,1,0,0,1],
+            [1,3,0,1,0,1,0,3,1],
+            [1,1,1,1,2,1,1,1,1]
+        ]
+        super().__init__()
 
+
+class Pillar_Hall_Room(Room):
+    """A spacious hall with symmetric stone pillars."""
+    def __init__(self):
+        self.grid = [
+            [1,1,1,1,2,1,1,1,1],
+            [1,0,0,0,0,0,0,0,1],
+            [1,0,1,0,1,0,1,0,1],
+            [1,0,0,0,0,0,0,0,1],
+            [2,0,1,0,0,0,1,0,2],
+            [1,0,0,0,0,0,0,0,1],
+            [1,0,1,0,1,0,1,0,1],
+            [1,0,0,0,0,0,0,0,1],
+            [1,1,1,1,2,1,1,1,1]
+        ]
+        super().__init__()
+        self.floor_type = "tile"
 
 
 
 
 rooms = {
     (0, 0): Spawn_Room(),
-    (1, 0): Treasure_Room(),
+    (1, 0): Pillar_Hall_Room(),   # Changed from Treasure_Room
     (2, 0): Monster_Room(),
     (3, 0): End_Room(),
 
-    (0, 1): Monster_Room(),
+    (0, 1): Bat_Nest_Room(),      # Changed from Monster_Room
     (1, 1): Key_Room(),
     (2, 1): Maze_Room(),
-    (3, 1): Treasure_Room(),
+    (3, 1): Safe_Room(),          # Changed from Treasure_Room
 
     (0, 2): Key_Room(),
-    (1, 2): Maze_Room(),
+    (1, 2): Armory_Room(),         # Changed from Maze_Room
     (2, 2): Monster_Room(),
     (3, 2): Key_Room(),
 
     (0, 3): Treasure_Room(),
-    (1, 3): Monster_Room(),
+    (1, 3): Bat_Nest_Room(),      # Changed from Monster_Room
     (2, 3): Maze_Room(),
     (3, 3): Key_Room(),
 }
@@ -563,22 +627,22 @@ def reset_game_state():
 
     rooms = {
         (0, 0): Spawn_Room(),
-        (1, 0): Treasure_Room(),
+        (1, 0): Pillar_Hall_Room(),   # Changed from Treasure_Room
         (2, 0): Monster_Room(),
         (3, 0): End_Room(),
 
-        (0, 1): Monster_Room(),
+        (0, 1): Bat_Nest_Room(),      # Changed from Monster_Room
         (1, 1): Key_Room(),
         (2, 1): Maze_Room(),
-        (3, 1): Treasure_Room(),
+        (3, 1): Safe_Room(),          # Changed from Treasure_Room
 
         (0, 2): Key_Room(),
-        (1, 2): Maze_Room(),
+        (1, 2): Armory_Room(),         # Changed from Maze_Room
         (2, 2): Monster_Room(),
         (3, 2): Key_Room(),
 
         (0, 3): Treasure_Room(),
-        (1, 3): Monster_Room(),
+        (1, 3): Bat_Nest_Room(),      # Changed from Monster_Room
         (2, 3): Maze_Room(),
         (3, 3): Key_Room(),
     }
