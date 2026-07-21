@@ -239,6 +239,7 @@ class Mimic(Enemy):
         self.damage = mimic_damage
         self.speed = mimic_speed
         
+        
 
         self.detection_radius = mimic_detection_radius
     def animation_update(self):

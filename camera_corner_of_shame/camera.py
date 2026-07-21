@@ -1,4 +1,5 @@
 import settings
+import pygame
 class camera:
     def __init__(self, width, height):
         self.width = width
@@ -14,5 +15,5 @@ class camera:
     def apply(self, x, y):
         return (x - self.x, y - self.y)
     
-    def apply_rect(self, rect_x, rect_y, rect_width, rect_height):
-        return (rect_x - self.x, rect_y - self.y, rect_width, rect_height)
+    #def apply_rect(self, rectangle):
+        #return Rect.move(-self.x, -self.y)

@@ -1,5 +1,5 @@
 import pygame
-import enemies
+#import enemies
 animation_speed = 8 #the number of frames to wait before switching to the next frame of animation, higher it is slower the animation
 animation_frame = 0
 animation_timer = 0
