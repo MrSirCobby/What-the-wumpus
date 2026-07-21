@@ -15,13 +15,13 @@ mimic_detection_radius = 120
 #player collision is moved to player_collision.p
 
 slime_health = 60
-slime_damage = 5
+slime_damage = 7
 slime_speed = 2
 slime_size = [30,25]
 slime_detection_radius = 150
 
 bat_health = 20
-bat_damage = 3
+bat_damage = 5
 bat_speed = 3
 bat_size = [20, 20]
 bat_detection_radius = 110
