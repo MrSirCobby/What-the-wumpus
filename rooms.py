@@ -508,7 +508,6 @@ class End_Room(Room):
         
 
 class Safe_Room(Room):
-    """A quiet resting room with tile flooring and a central chest with no enemies."""
     def __init__(self):
         self.grid = [
             [1,1,1,1,2,1,1,1,1],
@@ -526,7 +525,6 @@ class Safe_Room(Room):
 
 
 class Bat_Nest_Room(Room):
-    """A high-danger room filled with bats and wooden floor tiles."""
     def __init__(self):
         self.grid = [
             [1,1,1,1,2,1,1,1,1],
@@ -544,7 +542,6 @@ class Bat_Nest_Room(Room):
 
 
 class Armory_Room(Room):
-    """A storage room with multiple chests guarded by slimes."""
     def __init__(self):
         self.grid = [
             [1,1,1,1,2,1,1,1,1],
@@ -561,7 +558,6 @@ class Armory_Room(Room):
 
 
 class Pillar_Hall_Room(Room):
-    """A spacious hall with symmetric stone pillars."""
     def __init__(self):
         self.grid = [
             [1,1,1,1,2,1,1,1,1],
@@ -582,22 +578,22 @@ class Pillar_Hall_Room(Room):
 
 rooms = {
     (0, 0): Spawn_Room(),
-    (1, 0): Pillar_Hall_Room(),   # Changed from Treasure_Room
+    (1, 0): Pillar_Hall_Room(),  
     (2, 0): Monster_Room(),
     (3, 0): End_Room(),
 
-    (0, 1): Bat_Nest_Room(),      # Changed from Monster_Room
+    (0, 1): Bat_Nest_Room(),      
     (1, 1): Key_Room(),
     (2, 1): Maze_Room(),
-    (3, 1): Safe_Room(),          # Changed from Treasure_Room
+    (3, 1): Safe_Room(),         
 
     (0, 2): Key_Room(),
-    (1, 2): Armory_Room(),         # Changed from Maze_Room
+    (1, 2): Armory_Room(),        
     (2, 2): Monster_Room(),
     (3, 2): Key_Room(),
 
     (0, 3): Treasure_Room(),
-    (1, 3): Bat_Nest_Room(),      # Changed from Monster_Room
+    (1, 3): Bat_Nest_Room(),      
     (2, 3): Maze_Room(),
     (3, 3): Key_Room(),
 }
@@ -627,22 +623,22 @@ def reset_game_state():
 
     rooms = {
         (0, 0): Spawn_Room(),
-        (1, 0): Pillar_Hall_Room(),   # Changed from Treasure_Room
+        (1, 0): Pillar_Hall_Room(),   
         (2, 0): Monster_Room(),
         (3, 0): End_Room(),
 
-        (0, 1): Bat_Nest_Room(),      # Changed from Monster_Room
+        (0, 1): Bat_Nest_Room(),      
         (1, 1): Key_Room(),
         (2, 1): Maze_Room(),
-        (3, 1): Safe_Room(),          # Changed from Treasure_Room
+        (3, 1): Safe_Room(),         
 
         (0, 2): Key_Room(),
-        (1, 2): Armory_Room(),         # Changed from Maze_Room
+        (1, 2): Armory_Room(),        
         (2, 2): Monster_Room(),
         (3, 2): Key_Room(),
 
         (0, 3): Treasure_Room(),
-        (1, 3): Bat_Nest_Room(),      # Changed from Monster_Room
+        (1, 3): Bat_Nest_Room(),      
         (2, 3): Maze_Room(),
         (3, 3): Key_Room(),
     }
